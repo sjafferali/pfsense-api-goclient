@@ -12,6 +12,7 @@ import (
 
 var defaultTimeout = 5 * time.Second
 
+// Client provides client Methods
 type Client struct {
 	client *http.Client
 	Cfg    Config
