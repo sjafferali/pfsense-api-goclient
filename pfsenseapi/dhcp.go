@@ -12,19 +12,19 @@ const (
 type DHCPService service
 
 func (s DHCPService) Leases(ctx context.Context) ([]*DHCPLease, error) {
-	response, err := s.client.get(ctx, leasesEndpoint, nil)
+	response, err := s.client.get(ctx, leasesEndpoint)
 	if err != nil {
 		return nil, err
 	}
 
-	resp := new(DhcpLeaseResponse)
+	resp := new(dhcpLeaseResponse)
 	if err = json.Unmarshal(response, resp); err != nil {
 		return nil, err
 	}
 	return resp.Data, nil
 }
 
-type DhcpLeaseResponse struct {
+type dhcpLeaseResponse struct {
 	apiResponse
 	Data []*DHCPLease `json:"data"`
 }
