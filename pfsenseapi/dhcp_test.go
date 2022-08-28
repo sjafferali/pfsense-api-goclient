@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/require"
 )
@@ -18,7 +17,7 @@ const (
 "online":true,"staticmap_array_index":1,"state":"static"}]}`
 )
 
-func TestDHCPService_Leases(t *testing.T) {
+func TestDHCPService_ListLeases(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = io.WriteString(w, dhcpLeasesTestResponse)
@@ -27,8 +26,8 @@ func TestDHCPService_Leases(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(handler))
 	defer server.Close()
 
-	newClient := NewClient(server.URL, "", "", 5*time.Second)
-	response, err := newClient.DHCP.Leases(context.Background())
+	newClient := NewClientWithNoAuth(server.URL)
+	response, err := newClient.DHCP.ListLeases(context.Background())
 	require.NoError(t, err)
 	require.Len(t, response, 1)
 }
