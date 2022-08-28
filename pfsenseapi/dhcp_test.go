@@ -21,7 +21,7 @@ const (
 func TestDHCPService_Leases(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		io.WriteString(w, dhcpLeasesTestResponse)
+		_, _ = io.WriteString(w, dhcpLeasesTestResponse)
 	}
 
 	server := httptest.NewServer(http.HandlerFunc(handler))
