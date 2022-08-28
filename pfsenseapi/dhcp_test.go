@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/require"
 )
@@ -27,7 +26,7 @@ func TestDHCPService_Leases(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(handler))
 	defer server.Close()
 
-	newClient := NewClient(server.URL, "", "", 5*time.Second)
+	newClient := NewClientWithNoAuth(server.URL)
 	response, err := newClient.DHCP.Leases(context.Background())
 	require.NoError(t, err)
 	require.Len(t, response, 1)
