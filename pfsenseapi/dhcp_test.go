@@ -17,7 +17,7 @@ const (
 "online":true,"staticmap_array_index":1,"state":"static"}]}`
 )
 
-func TestDHCPService_Leases(t *testing.T) {
+func TestDHCPService_ListLeases(t *testing.T) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = io.WriteString(w, dhcpLeasesTestResponse)
@@ -27,7 +27,7 @@ func TestDHCPService_Leases(t *testing.T) {
 	defer server.Close()
 
 	newClient := NewClientWithNoAuth(server.URL)
-	response, err := newClient.DHCP.Leases(context.Background())
+	response, err := newClient.DHCP.ListLeases(context.Background())
 	require.NoError(t, err)
 	require.Len(t, response, 1)
 }

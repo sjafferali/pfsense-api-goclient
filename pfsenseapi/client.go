@@ -93,12 +93,19 @@ type service struct {
 	client *Client
 }
 
-func (c *Client) do(ctx context.Context, method, endpoint string, body []byte) (*http.Response, error) {
+func (c *Client) do(ctx context.Context, method, endpoint string, queryMap map[string]string, body []byte) (*http.Response, error) {
 	baseURL := fmt.Sprintf("%s/%s", c.Cfg.Host, endpoint)
 	req, err := http.NewRequestWithContext(ctx, method, baseURL, bytes.NewBuffer(body))
 	if err != nil {
 		return nil, err
 	}
+
+	q := req.URL.Query()
+	for key, value := range queryMap {
+		q.Add(key, value)
+	}
+	req.URL.RawQuery = q.Encode()
+
 	req.Header.Add("Content-Type", "application/json")
 	if c.Cfg.User != "" && c.Cfg.Password != "" {
 		req.SetBasicAuth(c.Cfg.User, c.Cfg.Password)
@@ -111,8 +118,8 @@ func (c *Client) do(ctx context.Context, method, endpoint string, body []byte) (
 	return c.client.Do(req)
 }
 
-func (c *Client) get(ctx context.Context, endpoint string) ([]byte, error) {
-	res, err := c.do(ctx, http.MethodGet, endpoint, nil)
+func (c *Client) get(ctx context.Context, endpoint string, queryMap map[string]string) ([]byte, error) {
+	res, err := c.do(ctx, http.MethodGet, endpoint, queryMap, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -128,8 +135,8 @@ func (c *Client) get(ctx context.Context, endpoint string) ([]byte, error) {
 	return body, nil
 }
 
-func (c *Client) post(ctx context.Context, endpoint string, body []byte) ([]byte, error) {
-	res, err := c.do(ctx, http.MethodPost, endpoint, body)
+func (c *Client) post(ctx context.Context, endpoint string, queryMap map[string]string, body []byte) ([]byte, error) {
+	res, err := c.do(ctx, http.MethodPost, endpoint, queryMap, body)
 	if err != nil {
 		return nil, err
 	}
