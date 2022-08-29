@@ -10,6 +10,7 @@ const (
 	staticMappingEndpoint = "api/v1/services/dhcpd/static_mapping"
 )
 
+// DHCPService provides DHCP API methods
 type DHCPService service
 
 type dhcpLeaseResponse struct {
@@ -17,6 +18,7 @@ type dhcpLeaseResponse struct {
 	Data []*DHCPLease `json:"data"`
 }
 
+// DHCPLease represents a single DHCP lease
 type DHCPLease struct {
 	IP                  *string
 	Type                *string
@@ -36,6 +38,7 @@ type dhcpStaticMappingResponse struct {
 	Data []*DHCPStaticMapping `json:"data"`
 }
 
+// DHCPStaticMapping represents a single DHCP static reservation
 type DHCPStaticMapping struct {
 	ID                     int    `json:"id"`
 	Mac                    string `json:"mac"`
@@ -51,7 +54,7 @@ type DHCPStaticMapping struct {
 	Domain                 string `json:"domain"`
 	DomainSearchList       string `json:"domainsearchlist"`
 	DDNSDomain             string `json:"ddnsdomain"`
-	DDNSdomainprimary      string `json:"ddnsdomainprimary"`
+	DDNSDomainPrimary      string `json:"ddnsdomainprimary"`
 	DDNSDomainSecondary    string `json:"ddnsdomainsecondary"`
 	DDNSDomainkeyName      string `json:"ddnsdomainkeyname"`
 	DDNSDomainkeyAlgorithm string `json:"ddnsdomainkeyalgorithm"`
@@ -66,6 +69,8 @@ type DHCPStaticMapping struct {
 	NumberOptions          string `json:"numberoptions"`
 }
 
+// DHCPStaticMappingRequest represents a single DHCP static reservation. This
+// type is used for updating or creating a new static reservation.
 type DHCPStaticMappingRequest struct {
 	ArpTableStaticEntry bool     `json:"arp_table_static_entry"`
 	Cid                 string   `json:"cid"`
@@ -81,6 +86,7 @@ type DHCPStaticMappingRequest struct {
 	Mac                 string   `json:"mac"`
 }
 
+// ListLeases returns a list of the DHCP leases
 func (s DHCPService) ListLeases(ctx context.Context) ([]*DHCPLease, error) {
 	response, err := s.client.get(ctx, leasesEndpoint, nil)
 	if err != nil {
@@ -94,6 +100,10 @@ func (s DHCPService) ListLeases(ctx context.Context) ([]*DHCPLease, error) {
 	return resp.Data, nil
 }
 
+// ListStaticMappings returns a list of the static reservations for the interface
+// provided. The interface can be either the interface's
+// descriptive name, the pfSense interface ID (e.g. wan, lan, optx), or the real
+// interface ID (e.g. igb0).
 func (s DHCPService) ListStaticMappings(ctx context.Context, netInterface string) ([]*DHCPStaticMapping, error) {
 	queryMap := map[string]string{
 		"interface": netInterface,
@@ -110,6 +120,7 @@ func (s DHCPService) ListStaticMappings(ctx context.Context, netInterface string
 	return resp.Data, nil
 }
 
+// CreateStaticMapping creates a new DHCP reservation
 func (s DHCPService) CreateStaticMapping(ctx context.Context, newStaticMapping DHCPStaticMappingRequest) error {
 	jsonData, err := json.Marshal(newStaticMapping)
 	if err != nil {
