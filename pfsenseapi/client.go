@@ -5,7 +5,6 @@ import (
 	"context"
 	"crypto/tls"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -140,7 +139,7 @@ func (c *Client) get(ctx context.Context, endpoint string, queryMap map[string]s
 		if err = json.Unmarshal(body, resp); err != nil {
 			return nil, fmt.Errorf("non 2xx response code received: %d", res.StatusCode)
 		}
-		return nil, errors.New(fmt.Sprintf("%s, response code %d", resp.Message, res.StatusCode))
+		return nil, fmt.Errorf("%s, response code %d", resp.Message, res.StatusCode)
 	}
 
 	return body, nil
@@ -166,7 +165,7 @@ func (c *Client) post(ctx context.Context, endpoint string, queryMap map[string]
 		if err = json.Unmarshal(respbody, resp); err != nil {
 			return nil, fmt.Errorf("non 2xx response code received: %d", res.StatusCode)
 		}
-		return nil, errors.New(fmt.Sprintf("%s, response code %d", resp.Message, res.StatusCode))
+		return nil, fmt.Errorf("%s, response code %d", resp.Message, res.StatusCode)
 	}
 
 	return respbody, nil
