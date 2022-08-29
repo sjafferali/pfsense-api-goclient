@@ -20,17 +20,17 @@ type dhcpLeaseResponse struct {
 
 // DHCPLease represents a single DHCP lease
 type DHCPLease struct {
-	IP                  *string
-	Type                *string
-	Mac                 *string
-	If                  *string
-	Starts              *string
-	End                 *string
-	Hostname            *string
-	Descr               *string
-	Online              *bool
-	StaticmapArrayIndex *int
-	State               *string
+	Ip                  string `json:"ip"`
+	Type                string `json:"type"`
+	Mac                 string `json:"mac"`
+	If                  string `json:"if"`
+	Starts              string `json:"starts"`
+	Ends                string `json:"ends"`
+	Hostname            string `json:"hostname"`
+	Descr               string `json:"descr"`
+	Online              bool   `json:"online"`
+	StaticmapArrayIndex int    `json:"staticmap_array_index"`
+	State               string `json:"state"`
 }
 
 type dhcpStaticMappingResponse struct {
