@@ -124,8 +124,12 @@ func (c *Client) get(ctx context.Context, endpoint string, queryMap map[string]s
 		return nil, err
 	}
 	defer func() {
+		_, _ = io.Copy(io.Discard, res.Body)
 		_ = res.Body.Close()
 	}()
+	if res.StatusCode < 200 || res.StatusCode > 299 {
+		return nil, fmt.Errorf("non 2xx response code received: %d", res.StatusCode)
+	}
 
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
@@ -141,8 +145,12 @@ func (c *Client) post(ctx context.Context, endpoint string, queryMap map[string]
 		return nil, err
 	}
 	defer func() {
+		_, _ = io.Copy(io.Discard, res.Body)
 		_ = res.Body.Close()
 	}()
+	if res.StatusCode < 200 || res.StatusCode > 299 {
+		return nil, fmt.Errorf("non 2xx response code received: %d", res.StatusCode)
+	}
 
 	respbody, err := io.ReadAll(res.Body)
 	if err != nil {
