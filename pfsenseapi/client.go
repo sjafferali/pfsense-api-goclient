@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"context"
 	"crypto/tls"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -106,7 +108,7 @@ func (c *Client) do(ctx context.Context, method, endpoint string, queryMap map[s
 	}
 	req.URL.RawQuery = q.Encode()
 
-	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Accept", "application/json")
 	if c.Cfg.User != "" && c.Cfg.Password != "" {
 		req.SetBasicAuth(c.Cfg.User, c.Cfg.Password)
 	}
@@ -127,13 +129,18 @@ func (c *Client) get(ctx context.Context, endpoint string, queryMap map[string]s
 		_, _ = io.Copy(io.Discard, res.Body)
 		_ = res.Body.Close()
 	}()
-	if res.StatusCode < 200 || res.StatusCode > 299 {
-		return nil, fmt.Errorf("non 2xx response code received: %d", res.StatusCode)
-	}
 
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
+	}
+
+	if res.StatusCode < 200 || res.StatusCode > 299 {
+		resp := new(apiResponse)
+		if err = json.Unmarshal(body, resp); err != nil {
+			return nil, fmt.Errorf("non 2xx response code received: %d", res.StatusCode)
+		}
+		return nil, errors.New(fmt.Sprintf("%s, response code %d", resp.Message, res.StatusCode))
 	}
 
 	return body, nil
@@ -148,13 +155,18 @@ func (c *Client) post(ctx context.Context, endpoint string, queryMap map[string]
 		_, _ = io.Copy(io.Discard, res.Body)
 		_ = res.Body.Close()
 	}()
-	if res.StatusCode < 200 || res.StatusCode > 299 {
-		return nil, fmt.Errorf("non 2xx response code received: %d", res.StatusCode)
-	}
 
 	respbody, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
+	}
+
+	if res.StatusCode < 200 || res.StatusCode > 299 {
+		resp := new(apiResponse)
+		if err = json.Unmarshal(respbody, resp); err != nil {
+			return nil, fmt.Errorf("non 2xx response code received: %d", res.StatusCode)
+		}
+		return nil, errors.New(fmt.Sprintf("%s, response code %d", resp.Message, res.StatusCode))
 	}
 
 	return respbody, nil
