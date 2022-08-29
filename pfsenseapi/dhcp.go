@@ -15,7 +15,7 @@ type DHCPService service
 
 type dhcpLeaseResponse struct {
 	apiResponse
-	Data []*DHCPLease `json:"data"`
+	Data []DHCPLease `json:"data"`
 }
 
 // DHCPLease represents a single DHCP lease
@@ -35,7 +35,7 @@ type DHCPLease struct {
 
 type dhcpStaticMappingResponse struct {
 	apiResponse
-	Data []*DHCPStaticMapping `json:"data"`
+	Data []DHCPStaticMapping `json:"data"`
 }
 
 // DHCPStaticMapping represents a single DHCP static reservation
@@ -87,7 +87,7 @@ type DHCPStaticMappingRequest struct {
 }
 
 // ListLeases returns a list of the DHCP leases
-func (s DHCPService) ListLeases(ctx context.Context) ([]*DHCPLease, error) {
+func (s DHCPService) ListLeases(ctx context.Context) ([]DHCPLease, error) {
 	response, err := s.client.get(ctx, leasesEndpoint, nil)
 	if err != nil {
 		return nil, err
@@ -104,7 +104,7 @@ func (s DHCPService) ListLeases(ctx context.Context) ([]*DHCPLease, error) {
 // provided. The interface can be either the interface's
 // descriptive name, the pfSense interface ID (e.g. wan, lan, optx), or the real
 // interface ID (e.g. igb0).
-func (s DHCPService) ListStaticMappings(ctx context.Context, netInterface string) ([]*DHCPStaticMapping, error) {
+func (s DHCPService) ListStaticMappings(ctx context.Context, netInterface string) ([]DHCPStaticMapping, error) {
 	queryMap := map[string]string{
 		"interface": netInterface,
 	}
