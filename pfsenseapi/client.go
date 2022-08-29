@@ -108,8 +108,7 @@ func (c *Client) do(ctx context.Context, method, endpoint string, queryMap map[s
 	}
 	req.URL.RawQuery = q.Encode()
 
-	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("accept", "application/json")
+	req.Header.Add("Accept", "application/json")
 	if c.Cfg.User != "" && c.Cfg.Password != "" {
 		req.SetBasicAuth(c.Cfg.User, c.Cfg.Password)
 	}
