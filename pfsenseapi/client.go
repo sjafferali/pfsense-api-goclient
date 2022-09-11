@@ -18,7 +18,9 @@ type Client struct {
 	client *http.Client
 	Cfg    Config
 
-	DHCP *DHCPService
+	DHCP      *DHCPService
+	Status    *StatusService
+	Interface *InterfaceService
 }
 
 // Config provides configuration for the client. These values are only read in
