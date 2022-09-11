@@ -84,7 +84,7 @@ func (s InterfaceService) ListInterfaces(ctx context.Context) ([]*Interface, err
 	return interfaces, nil
 }
 
-// ListVLANs returns the interfaces
+// ListVLANs returns the VLANs
 func (s InterfaceService) ListVLANs(ctx context.Context) ([]*VLAN, error) {
 	response, err := s.client.get(ctx, interfaceVLANEndpoint, nil)
 	if err != nil {
