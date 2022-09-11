@@ -52,6 +52,8 @@ func NewClient(config Config) *Client {
 		client: httpclient,
 	}
 	newClient.DHCP = &DHCPService{client: newClient}
+	newClient.Status = &StatusService{client: newClient}
+	newClient.Interface = &InterfaceService{client: newClient}
 	return newClient
 }
 
