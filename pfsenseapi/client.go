@@ -21,6 +21,7 @@ type Client struct {
 	DHCP      *DHCPService
 	Status    *StatusService
 	Interface *InterfaceService
+	Routing   *RoutingService
 }
 
 // Config provides configuration for the client. These values are only read in
@@ -54,6 +55,7 @@ func NewClient(config Config) *Client {
 	newClient.DHCP = &DHCPService{client: newClient}
 	newClient.Status = &StatusService{client: newClient}
 	newClient.Interface = &InterfaceService{client: newClient}
+	newClient.Routing = &RoutingService{client: newClient}
 	return newClient
 }
 
