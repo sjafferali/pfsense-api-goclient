@@ -175,6 +175,58 @@ func (c *Client) post(ctx context.Context, endpoint string, queryMap map[string]
 	return respbody, nil
 }
 
+func (c *Client) put(ctx context.Context, endpoint string, queryMap map[string]string, body []byte) ([]byte, error) {
+	res, err := c.do(ctx, http.MethodPut, endpoint, queryMap, body)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_, _ = io.Copy(io.Discard, res.Body)
+		_ = res.Body.Close()
+	}()
+
+	respbody, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	if res.StatusCode < 200 || res.StatusCode > 299 {
+		resp := new(apiResponse)
+		if err = json.Unmarshal(respbody, resp); err != nil {
+			return nil, fmt.Errorf("non 2xx response code received: %d", res.StatusCode)
+		}
+		return nil, fmt.Errorf("%s, response code %d", resp.Message, res.StatusCode)
+	}
+
+	return respbody, nil
+}
+
+func (c *Client) delete(ctx context.Context, endpoint string, queryMap map[string]string) ([]byte, error) {
+	res, err := c.do(ctx, http.MethodDelete, endpoint, queryMap, nil)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_, _ = io.Copy(io.Discard, res.Body)
+		_ = res.Body.Close()
+	}()
+
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	if res.StatusCode < 200 || res.StatusCode > 299 {
+		resp := new(apiResponse)
+		if err = json.Unmarshal(body, resp); err != nil {
+			return nil, fmt.Errorf("non 2xx response code received: %d", res.StatusCode)
+		}
+		return nil, fmt.Errorf("%s, response code %d", resp.Message, res.StatusCode)
+	}
+
+	return body, nil
+}
+
 type apiResponse struct {
 	Status  string `json:"status"`
 	Code    int    `json:"code"`
