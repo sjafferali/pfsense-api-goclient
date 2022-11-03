@@ -6,3 +6,4 @@ Go client library to call the pfsense API: https://github.com/jaredhendrickson13
 [![Go Report Card](https://goreportcard.com/badge/github.com/sjafferali/pfsense-api-goclient)](https://goreportcard.com/report/github.com/sjafferali/pfsense-api-goclient)
 [![Unit](https://github.com/sjafferali/pfsense-api-goclient/actions/workflows/unit.yaml/badge.svg)](https://github.com/sjafferali/pfsense-api-goclient/actions?query=branch%3Amain)
 [![golangci-lint](https://github.com/sjafferali/pfsense-api-goclient/actions/workflows/golang-ci-lint.yaml/badge.svg)](https://github.com/sjafferali/pfsense-api-goclient/actions?query=branch%3Amain)
+[![govulncheck](https://github.com/sjafferali/pfsense-api-goclient/actions/workflows/govulncheck.yaml/badge.svg)](https://github.com/sjafferali/pfsense-api-goclient/actions?query=branch%3Amain)
