@@ -14,7 +14,7 @@ const (
 	routingApplyEndpoint   = "api/v1/routing/apply"
 )
 
-// RoutingService provides interface API methods
+// RoutingService provides routing API methods
 type RoutingService service
 
 // Gateway represents a single routing gateway
