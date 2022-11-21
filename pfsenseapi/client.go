@@ -33,6 +33,9 @@ type Config struct {
 	User     string
 	Password string
 
+	JWTAuthEnabled bool
+	JWTToken       string
+
 	ApiClientID    string
 	ApiClientToken string
 
@@ -72,9 +75,9 @@ func NewClientWithNoAuth(host string) *Client {
 	return NewClient(config)
 }
 
-// NewClientFromLocalAuth constructs a new Client using Local username/password
+// NewClientWithLocalAuth constructs a new Client using Local username/password
 // authentication
-func NewClientFromLocalAuth(host, user, password string) *Client {
+func NewClientWithLocalAuth(host, user, password string) *Client {
 	config := Config{
 		Host:     host,
 		User:     user,
@@ -86,8 +89,8 @@ func NewClientFromLocalAuth(host, user, password string) *Client {
 	return NewClient(config)
 }
 
-// NewClientFromTokenAuth constructs a new Client using token authentication
-func NewClientFromTokenAuth(host, apiClientID, apiClientToken string) *Client {
+// NewClientWithTokenAuth constructs a new Client using token authentication
+func NewClientWithTokenAuth(host, apiClientID, apiClientToken string) *Client {
 	config := Config{
 		Host:           host,
 		ApiClientID:    apiClientID,
