@@ -17,7 +17,9 @@ var (
 	defaultTimeout = 5 * time.Second
 
 	// noAuthEndpoints is a list of endpoints that require no authentication
-	noAuthEndpoints = []string{}
+	noAuthEndpoints = []string{
+		apiErrorEndpoint,
+	}
 
 	// localAuthEndpoints is a list of endpoints that always require local
 	// authentication. This overrides the default behavior of authenticating with
@@ -32,6 +34,7 @@ type Client struct {
 	client *http.Client
 	Cfg    Config
 
+	API       *APIService
 	Token     *TokenService
 	DHCP      *DHCPService
 	Status    *StatusService
@@ -82,6 +85,7 @@ func NewClient(config Config) *Client {
 		Cfg:    config,
 		client: httpclient,
 	}
+	newClient.API = &APIService{client: newClient}
 	newClient.Token = &TokenService{client: newClient}
 	newClient.DHCP = &DHCPService{client: newClient}
 	newClient.Status = &StatusService{client: newClient}
