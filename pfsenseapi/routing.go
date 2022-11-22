@@ -26,7 +26,7 @@ type Gateway struct {
 	FriendlyIface   string `json:"friendlyiface"`
 	FriendlyIfDescr string `json:"friendlyifdescr"`
 	Name            string `json:"name"`
-	Attribute       string `json:"attribute"`
+	Attribute       any    `json:"attribute"`
 	IsDefaultGW     bool   `json:"isdefaultgw"`
 	Monitor         string `json:"monitor"`
 	Descr           string `json:"descr"`
