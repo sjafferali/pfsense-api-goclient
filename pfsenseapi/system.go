@@ -11,8 +11,8 @@ const (
 	apiErrorEndpoint   = "api/v1/system/api/error"
 )
 
-// APIService provides API API methods
-type APIService service
+// SystemService provides System API methods
+type SystemService service
 
 // APIConfiguration represents the API configuration
 type APIConfiguration struct {
@@ -34,7 +34,7 @@ type apiConfigurationResponse struct {
 }
 
 // GetAPIConfiguration returns the API configuration
-func (s APIService) GetAPIConfiguration(ctx context.Context) (*APIConfiguration, error) {
+func (s SystemService) GetAPIConfiguration(ctx context.Context) (*APIConfiguration, error) {
 	response, err := s.client.get(ctx, apiEndpoint, nil)
 	if err != nil {
 		return nil, err
@@ -68,7 +68,7 @@ type APIConfigurationRequest struct {
 }
 
 // UpdateAPIConfiguration updates the API configuration
-func (s APIService) UpdateAPIConfiguration(ctx context.Context, apiConfiguration APIConfigurationRequest) error {
+func (s SystemService) UpdateAPIConfiguration(ctx context.Context, apiConfiguration APIConfigurationRequest) error {
 	jsonData, err := json.Marshal(apiConfiguration)
 	if err != nil {
 		return err
@@ -93,7 +93,7 @@ type apiVersionResponse struct {
 }
 
 // GetAPIVersion returns the API versions
-func (s APIService) GetAPIVersion(ctx context.Context) (*APIVersion, error) {
+func (s SystemService) GetAPIVersion(ctx context.Context) (*APIVersion, error) {
 	response, err := s.client.get(ctx, apiVersionEndpoint, nil)
 	if err != nil {
 		return nil, err
@@ -120,7 +120,7 @@ type errorDefinitionsResponse struct {
 
 // GetErrorDefinitions returns a map with the error code being the key and value
 // being the error definition.
-func (s APIService) GetErrorDefinitions(ctx context.Context) (map[string]*ErrorDefinition, error) {
+func (s SystemService) GetErrorDefinitions(ctx context.Context) (map[string]*ErrorDefinition, error) {
 	response, err := s.client.get(ctx, apiErrorEndpoint, nil)
 	if err != nil {
 		return nil, err
