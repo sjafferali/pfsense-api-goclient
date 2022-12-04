@@ -34,7 +34,7 @@ type Client struct {
 	client *http.Client
 	Cfg    Config
 
-	API       *APIService
+	System    *SystemService
 	Token     *TokenService
 	DHCP      *DHCPService
 	Status    *StatusService
@@ -85,7 +85,7 @@ func NewClient(config Config) *Client {
 		Cfg:    config,
 		client: httpclient,
 	}
-	newClient.API = &APIService{client: newClient}
+	newClient.System = &SystemService{client: newClient}
 	newClient.Token = &TokenService{client: newClient}
 	newClient.DHCP = &DHCPService{client: newClient}
 	newClient.Status = &StatusService{client: newClient}
