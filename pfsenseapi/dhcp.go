@@ -3,6 +3,7 @@ package pfsenseapi
 import (
 	"context"
 	"encoding/json"
+	"strconv"
 )
 
 const (
@@ -80,7 +81,6 @@ type DHCPStaticMappingRequest struct {
 	DomainSearchList    []string `json:"domainsearchlist"`
 	Gateway             string   `json:"gateway"`
 	Hostname            string   `json:"hostname"`
-	Id                  int      `json:"id"`
 	Interface           string   `json:"interface"`
 	Ipaddr              string   `json:"ipaddr"`
 	Mac                 string   `json:"mac"`
@@ -120,13 +120,52 @@ func (s DHCPService) ListStaticMappings(ctx context.Context, netInterface string
 	return resp.Data, nil
 }
 
-// CreateStaticMapping creates a new DHCP reservation
+// CreateStaticMapping creates a new DHCP static mapping.
 func (s DHCPService) CreateStaticMapping(ctx context.Context, newStaticMapping DHCPStaticMappingRequest) error {
 	jsonData, err := json.Marshal(newStaticMapping)
 	if err != nil {
 		return err
 	}
 	_, err = s.client.post(ctx, staticMappingEndpoint, nil, jsonData)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type dhcpStaticMappingRequestUpdate struct {
+	DHCPStaticMappingRequest
+	Id int `json:"id"`
+}
+
+// UpdateStaticMapping modifies a DHCP static mapping.
+func (s DHCPService) UpdateStaticMapping(ctx context.Context, idToUpdate int, mappingData DHCPStaticMappingRequest) error {
+	requestData := dhcpStaticMappingRequestUpdate{
+		DHCPStaticMappingRequest: mappingData,
+		Id:                       idToUpdate,
+	}
+
+	jsonData, err := json.Marshal(requestData)
+	if err != nil {
+		return err
+	}
+	_, err = s.client.put(ctx, staticMappingEndpoint, nil, jsonData)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// DeleteStaticMapping deletes a DHCP static mapping.
+func (s DHCPService) DeleteStaticMapping(ctx context.Context, mappingInterface string, idToDelete int) error {
+	_, err := s.client.delete(
+		ctx,
+		staticMappingEndpoint,
+		map[string]string{
+			"interface": mappingInterface,
+			"id":        strconv.Itoa(idToDelete),
+		},
+	)
 	if err != nil {
 		return err
 	}
