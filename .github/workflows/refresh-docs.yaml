@@ -1,3 +1,4 @@
+name: refresh-docs
 on:
   release:
     types:
