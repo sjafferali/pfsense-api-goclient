@@ -3,7 +3,7 @@ module github.com/sjafferali/pfsense-api-goclient
 go 1.20
 
 require (
-	github.com/stretchr/testify v1.8.3
+	github.com/stretchr/testify v1.8.4
 	golang.org/x/exp v0.0.0-20221031165847-c99f073a8326
 )
 
