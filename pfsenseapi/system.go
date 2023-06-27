@@ -240,6 +240,8 @@ func (s SystemService) DeleteCACertificate(ctx context.Context, refid string) er
 	return nil
 }
 
+// CACertificateRequest represents a single CA Certificate. This type is used for
+// creating a new CA certificate.
 type CACertificateRequest struct {
 	Caref                string `json:"caref"`
 	Crt                  string `json:"crt"`
@@ -315,6 +317,83 @@ func (s SystemService) DeleteCertificate(ctx context.Context, refid string) erro
 			"refid": refid,
 		},
 	)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// CertificateCreateRequest represents a single Certificate. This type is used to
+// create a new certificate.
+type CertificateCreateRequest struct {
+	Active   bool `json:"active"`
+	Altnames []struct {
+		DNS   string `json:"dns,omitempty"`
+		IP    string `json:"ip,omitempty"`
+		URI   string `json:"uri,omitempty"`
+		Email string `json:"email,omitempty"`
+	} `json:"altnames"`
+	Caref                string `json:"caref"`
+	Crt                  string `json:"crt"`
+	Descr                string `json:"descr"`
+	DigestAlg            string `json:"digest_alg"`
+	DnCity               string `json:"dn_city"`
+	DnCommonname         string `json:"dn_commonname"`
+	DnCountry            string `json:"dn_country"`
+	DnOrganization       string `json:"dn_organization"`
+	DnOrganizationalunit string `json:"dn_organizationalunit"`
+	DnState              string `json:"dn_state"`
+	Ecname               string `json:"ecname"`
+	Keylen               int    `json:"keylen"`
+	Keytype              string `json:"keytype"`
+	Lifetime             int    `json:"lifetime"`
+	Method               string `json:"method"`
+	Prv                  string `json:"prv"`
+	Type                 string `json:"type"`
+}
+
+// CreateCertificate generate or import new certificate.
+func (s SystemService) CreateCertificate(ctx context.Context, newCertificate CertificateCreateRequest) error {
+	jsonData, err := json.Marshal(newCertificate)
+	if err != nil {
+		return err
+	}
+	_, err = s.client.post(ctx, certificateEndpoint, nil, jsonData)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// CertificateUpdateRequest is used to update a certificate.
+type CertificateUpdateRequest struct {
+	Descr  string `json:"descr"`
+	Prv    string `json:"prv"`
+	Crt    string `json:"crt"`
+	Active bool   `json:"active"`
+}
+
+type certificateUpdateRequest struct {
+	CertificateUpdateRequest
+	Refid string `json:"refid"`
+}
+
+// UpdateCertificate modifies an existing certificate
+func (s SystemService) UpdateCertificate(
+	ctx context.Context,
+	refIDToUpdate string,
+	newCertificateData CertificateUpdateRequest,
+) error {
+	requestData := certificateUpdateRequest{
+		CertificateUpdateRequest: newCertificateData,
+		Refid:                    refIDToUpdate,
+	}
+
+	jsonData, err := json.Marshal(requestData)
+	if err != nil {
+		return err
+	}
+	_, err = s.client.put(ctx, certificateEndpoint, nil, jsonData)
 	if err != nil {
 		return err
 	}
