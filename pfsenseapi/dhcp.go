@@ -29,7 +29,7 @@ type DHCPLease struct {
 	Ends                string `json:"ends"`
 	Hostname            string `json:"hostname"`
 	Descr               string `json:"descr"`
-	Online              bool   `json:"online"`
+	Online              string `json:"online"`
 	StaticmapArrayIndex int    `json:"staticmap_array_index"`
 	State               string `json:"state"`
 }
