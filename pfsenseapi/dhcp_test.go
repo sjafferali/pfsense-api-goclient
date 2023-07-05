@@ -16,7 +16,7 @@ const (
 	dhcpLeasesTestResponse = `{"status":"ok","code":200,"return":0,"message":"Success",
 "data":[{"ip":"192.168.60.7","type":"static","mac":"b4:5f:56:22:d4:33","if":"opt10",
 "starts":"","ends":"","hostname":"host1","descr":"host1",
-"online":true,"staticmap_array_index":1,"state":"static"}]}`
+"online":"active","staticmap_array_index":1,"state":"static"}]}`
 	dhcpStaticMappingsTestResponse = `{"status":"ok","code":200,"return":0,"message":"Success",
 "data":[{"id":0,"mac":"b4:5f:56:22:d4:33","cid":"","ipaddr":"192.168.1.2","hostname":"host1"
 ,"descr":"host1","filename":"","rootpath":"","defaultleasetime":"",
