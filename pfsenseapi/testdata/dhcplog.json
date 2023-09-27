@@ -1,0 +1,11 @@
+{
+  "status": "ok",
+  "code": 200,
+  "return": 0,
+  "message": "Success",
+  "data": [
+    "Sep 26 18:01:00 pfsense newsyslog[71570]: logfile turned over due to size>500K",
+    "Sep 26 18:01:00 pfsense dhclient[11438]: DHCPREQUEST on ix1 to 8.3.88.1 port 67",
+    "Sep 26 18:01:33 pfsense dhcp6c[19200]: Sending Solicit"
+  ]
+}
