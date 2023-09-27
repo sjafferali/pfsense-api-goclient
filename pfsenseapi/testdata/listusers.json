@@ -1,0 +1,35 @@
+
+{
+  "status": "ok",
+  "code": 200,
+  "return": 0,
+  "message": "Success",
+  "data": [
+    {
+      "name": "admin",
+      "descr": "System Administrator",
+      "scope": "system",
+      "groupname": "admins",
+      "bcrypt-hash": "$2y$10$vYSJrVv/3fZboUfJbtUNweXGxZZlYKnXKmmDo4uunbBgdCaNNpATK",
+      "uid": "0",
+      "priv": [
+        "user-shell-access"
+      ]
+    },
+    {
+      "scope": "user",
+      "bcrypt-hash": "$2y$10$XwBEUIN6sIajr04jXT7FCeMTSmmTTemWolroLz6A4qKpT4KUnoX.2",
+      "descr": "",
+      "name": "testuser",
+      "expires": "",
+      "dashboardcolumns": "2",
+      "authorizedkeys": "",
+      "ipsecpsk": "",
+      "webguicss": "pfSense.css",
+      "uid": "2000",
+      "priv": [
+        "system-xmlrpc-ha-sync"
+      ]
+    }
+  ]
+}
