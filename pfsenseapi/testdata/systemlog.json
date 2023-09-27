@@ -1,0 +1,10 @@
+{
+  "status": "ok",
+  "code": 200,
+  "return": 0,
+  "message": "Success",
+  "data": [
+    "Sep 25 09:13:00 pfsense newsyslog[82085]: logfile turned over due to size>500K",
+    "Sep 25 09:13:00 pfsense sshguard[6762]: Exiting on signal."
+  ]
+}

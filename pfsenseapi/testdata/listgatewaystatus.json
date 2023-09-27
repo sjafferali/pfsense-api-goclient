@@ -1,0 +1,28 @@
+{
+  "status": "ok",
+  "code": 200,
+  "return": 0,
+  "message": "Success",
+  "data": [
+    {
+      "monitorip": "75.75.75.75",
+      "srcip": "192.168.0.1",
+      "name": "WAN1_DHCP",
+      "delay": 12.051,
+      "stddev": 0.445,
+      "loss": 0,
+      "status": "online",
+      "substatus": "none"
+    },
+    {
+      "monitorip": "9.9.9.9",
+      "srcip": "192.168.1.1",
+      "name": "WAN2_DHCP",
+      "delay": 5.541,
+      "stddev": 2.73,
+      "loss": 0,
+      "status": "online",
+      "substatus": "none"
+    }
+  ]
+}
