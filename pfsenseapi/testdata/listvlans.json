@@ -1,0 +1,22 @@
+{
+  "status": "ok",
+  "code": 200,
+  "return": 0,
+  "message": "Success",
+  "data": [
+    {
+      "if": "ix3",
+      "tag": "10",
+      "pcp": "",
+      "descr": "Trusted",
+      "vlanif": "ix3.10"
+    },
+    {
+      "if": "ix3",
+      "tag": "20",
+      "pcp": "",
+      "descr": "Gaming",
+      "vlanif": "ix3.20"
+    }
+  ]
+}
