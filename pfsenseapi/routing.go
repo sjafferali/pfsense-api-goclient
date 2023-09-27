@@ -79,17 +79,31 @@ type GatewayRequest struct {
 	Weight         int    `json:"weight"`
 }
 
+type createGatewayResponse struct {
+	apiResponse
+	Data *Gateway `json:"data"`
+}
+
 // CreateGateway creates a new Gateway
-func (s RoutingService) CreateGateway(ctx context.Context, newGateway GatewayRequest) error {
+func (s RoutingService) CreateGateway(
+	ctx context.Context,
+	newGateway GatewayRequest,
+) (*Gateway, error) {
 	jsonData, err := json.Marshal(newGateway)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	_, err = s.client.post(ctx, gatewayEndpoint, nil, jsonData)
+
+	response, err := s.client.post(ctx, gatewayEndpoint, nil, jsonData)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+
+	resp := new(createGatewayResponse)
+	if err = json.Unmarshal(response, resp); err != nil {
+		return nil, err
+	}
+	return resp.Data, nil
 }
 
 // DeleteGateway deletes a Gateway

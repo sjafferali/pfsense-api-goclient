@@ -264,17 +264,30 @@ type CACertificateRequest struct {
 	Trust                bool   `json:"trust"`
 }
 
+type createCACertificateResponse struct {
+	apiResponse
+	Data *CACertificate `json:"data"`
+}
+
 // CreateCACertificate generate or import new CA certificate.
-func (s SystemService) CreateCACertificate(ctx context.Context, newCACertificate CACertificateRequest) error {
+func (s SystemService) CreateCACertificate(
+	ctx context.Context,
+	newCACertificate CACertificateRequest,
+) (*CACertificate, error) {
 	jsonData, err := json.Marshal(newCACertificate)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	_, err = s.client.post(ctx, caCertificatesEndpoint, nil, jsonData)
+	response, err := s.client.post(ctx, caCertificatesEndpoint, nil, jsonData)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+
+	resp := new(createCACertificateResponse)
+	if err = json.Unmarshal(response, resp); err != nil {
+		return nil, err
+	}
+	return resp.Data, nil
 }
 
 // Certificate represents a single installed SSL/TLS certificate.
@@ -352,17 +365,30 @@ type CertificateCreateRequest struct {
 	Type                 string `json:"type"`
 }
 
+type createCertificateResponse struct {
+	apiResponse
+	Data *Certificate `json:"data"`
+}
+
 // CreateCertificate generate or import new certificate.
-func (s SystemService) CreateCertificate(ctx context.Context, newCertificate CertificateCreateRequest) error {
+func (s SystemService) CreateCertificate(
+	ctx context.Context,
+	newCertificate CertificateCreateRequest,
+) (*Certificate, error) {
 	jsonData, err := json.Marshal(newCertificate)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	_, err = s.client.post(ctx, certificateEndpoint, nil, jsonData)
+	response, err := s.client.post(ctx, certificateEndpoint, nil, jsonData)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+
+	resp := new(createCertificateResponse)
+	if err = json.Unmarshal(response, resp); err != nil {
+		return nil, err
+	}
+	return resp.Data, nil
 }
 
 // CertificateUpdateRequest is used to update a certificate.
@@ -704,17 +730,30 @@ type TunableRequest struct {
 	Value   string `json:"value"`
 }
 
+type createTunableResponse struct {
+	apiResponse
+	Data *Tunable `json:"data"`
+}
+
 // CreateTunable creates a new system tunable.
-func (s SystemService) CreateTunable(ctx context.Context, newTunable TunableRequest) error {
+func (s SystemService) CreateTunable(
+	ctx context.Context,
+	newTunable TunableRequest,
+) (*Tunable, error) {
 	jsonData, err := json.Marshal(newTunable)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	_, err = s.client.post(ctx, tunableEndpoint, nil, jsonData)
+	response, err := s.client.post(ctx, tunableEndpoint, nil, jsonData)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+
+	resp := new(createTunableResponse)
+	if err = json.Unmarshal(response, resp); err != nil {
+		return nil, err
+	}
+	return resp.Data, nil
 }
 
 type tunableRequestUpdate struct {

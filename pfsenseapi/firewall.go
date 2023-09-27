@@ -60,8 +60,17 @@ type firewallAliasRequestCreate struct {
 	Apply bool `json:"apply"`
 }
 
-// CreateAlias creates a new Alias
-func (s FirewallService) CreateAlias(ctx context.Context, newAlias FirewallAliasRequest, apply bool) error {
+type createAliasResponse struct {
+	apiResponse
+	Data *FirewallAlias `json:"data"`
+}
+
+// CreateAlias creates a new Alias.
+func (s FirewallService) CreateAlias(
+	ctx context.Context,
+	newAlias FirewallAliasRequest,
+	apply bool,
+) (*FirewallAlias, error) {
 	requestData := firewallAliasRequestCreate{
 		FirewallAliasRequest: newAlias,
 		Apply:                apply,
@@ -69,13 +78,18 @@ func (s FirewallService) CreateAlias(ctx context.Context, newAlias FirewallAlias
 
 	jsonData, err := json.Marshal(requestData)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	_, err = s.client.post(ctx, aliasEndpoint, nil, jsonData)
+	response, err := s.client.post(ctx, aliasEndpoint, nil, jsonData)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+
+	resp := new(createAliasResponse)
+	if err = json.Unmarshal(response, resp); err != nil {
+		return nil, err
+	}
+	return resp.Data, nil
 }
 
 // DeleteAlias deletes a firewall Alias
@@ -271,21 +285,35 @@ type firewallRuleCreateRequest struct {
 	Apply bool `json:"apply"`
 }
 
+type createRuleResponse struct {
+	apiResponse
+	Data *FirewallRule `json:"data"`
+}
+
 // CreateRule creates a new Rule
-func (s FirewallService) CreateRule(ctx context.Context, newRule FirewallRuleRequest, apply bool) error {
+func (s FirewallService) CreateRule(
+	ctx context.Context,
+	newRule FirewallRuleRequest,
+	apply bool,
+) (*FirewallRule, error) {
 	requestData := firewallRuleCreateRequest{
 		FirewallRuleRequest: newRule,
 		Apply:               apply,
 	}
 	jsonData, err := json.Marshal(requestData)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	_, err = s.client.post(ctx, ruleEndpoint, nil, jsonData)
+	response, err := s.client.post(ctx, ruleEndpoint, nil, jsonData)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+
+	resp := new(createRuleResponse)
+	if err = json.Unmarshal(response, resp); err != nil {
+		return nil, err
+	}
+	return resp.Data, nil
 }
 
 type firewallRuleUpdateRequest struct {

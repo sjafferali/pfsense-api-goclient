@@ -138,17 +138,31 @@ type InterfaceRequest struct {
 	Type6                         string   `json:"type6"`
 }
 
+type createInterfaceResponse struct {
+	apiResponse
+	Data *Interface `json:"data"`
+}
+
 // CreateInterface creates a new interface.
-func (s InterfaceService) CreateInterface(ctx context.Context, newInterface InterfaceRequest) error {
+func (s InterfaceService) CreateInterface(
+	ctx context.Context,
+	newInterface InterfaceRequest,
+) (*Interface, error) {
 	jsonData, err := json.Marshal(newInterface)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	_, err = s.client.post(ctx, interfaceEndpoint, nil, jsonData)
+
+	response, err := s.client.post(ctx, interfaceEndpoint, nil, jsonData)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+
+	resp := new(createInterfaceResponse)
+	if err = json.Unmarshal(response, resp); err != nil {
+		return nil, err
+	}
+	return resp.Data, nil
 }
 
 type interfaceRequestUpdate struct {
@@ -226,17 +240,31 @@ type VLANRequest struct {
 	Tag   int    `json:"tag"`
 }
 
+type createVLANResponse struct {
+	apiResponse
+	Data *VLAN `json:"data"`
+}
+
 // CreateVLAN creates a new VLAN.
-func (s InterfaceService) CreateVLAN(ctx context.Context, newVLAN VLANRequest) error {
+func (s InterfaceService) CreateVLAN(
+	ctx context.Context,
+	newVLAN VLANRequest,
+) (*VLAN, error) {
 	jsonData, err := json.Marshal(newVLAN)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	_, err = s.client.post(ctx, interfaceVLANEndpoint, nil, jsonData)
+
+	response, err := s.client.post(ctx, interfaceVLANEndpoint, nil, jsonData)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+
+	resp := new(createVLANResponse)
+	if err = json.Unmarshal(response, resp); err != nil {
+		return nil, err
+	}
+	return resp.Data, nil
 }
 
 type vlanRequestUpdate struct {
@@ -310,17 +338,30 @@ type InterfaceGroupRequestCreate struct {
 	Ifname  string   `json:"ifname"`
 }
 
+type createInterfaceGroupResponse struct {
+	apiResponse
+	Data *InterfaceGroup `json:"data"`
+}
+
 // CreateInterfaceGroup creates a new interface group.
-func (s InterfaceService) CreateInterfaceGroup(ctx context.Context, newGroup InterfaceGroupRequestCreate) error {
+func (s InterfaceService) CreateInterfaceGroup(
+	ctx context.Context,
+	newGroup InterfaceGroupRequestCreate,
+) (*InterfaceGroup, error) {
 	jsonData, err := json.Marshal(newGroup)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	_, err = s.client.post(ctx, interfaceGroupEndpoint, nil, jsonData)
+	response, err := s.client.post(ctx, interfaceGroupEndpoint, nil, jsonData)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+
+	resp := new(createInterfaceGroupResponse)
+	if err = json.Unmarshal(response, resp); err != nil {
+		return nil, err
+	}
+	return resp.Data, nil
 }
 
 type InterfaceGroupRequestUpdate struct {
