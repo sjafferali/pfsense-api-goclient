@@ -1,0 +1,37 @@
+{
+  "status": "ok",
+  "code": 200,
+  "return": 0,
+  "message": "Success",
+  "data": [
+    {
+      "id": 0,
+      "mac": "b4:5f:56:22:d4:33",
+      "cid": "",
+      "ipaddr": "192.168.1.2",
+      "hostname": "host1",
+      "descr": "host1",
+      "filename": "",
+      "rootpath": "",
+      "defaultleasetime": "",
+      "maxleasetime": "",
+      "gateway": "",
+      "domain": "",
+      "domainsearchlist": "",
+      "ddnsdomain": "",
+      "ddnsdomainprimary": "",
+      "ddnsdomainsecondary": "",
+      "ddnsdomainkeyname": "",
+      "ddnsdomainkeyalgorithm": "hmac-md5",
+      "ddnsdomainkey": "",
+      "tftp": "",
+      "ldap": "",
+      "nextserver": "",
+      "filename32": "",
+      "filename64": "",
+      "filename32arm": "",
+      "filename64arm": "",
+      "numberoptions": ""
+    }
+  ]
+}
