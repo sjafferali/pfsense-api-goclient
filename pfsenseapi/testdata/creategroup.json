@@ -1,0 +1,14 @@
+{
+  "status": "ok",
+  "code": 200,
+  "return": 0,
+  "message": "Success",
+  "data": {
+    "scope": "local",
+    "name": "testgroup",
+    "description": "testing",
+    "member": [],
+    "priv": [],
+    "gid": 2004
+  }
+}
