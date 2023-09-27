@@ -1,0 +1,18 @@
+{
+  "status": "ok",
+  "code": 200,
+  "return": 0,
+  "message": "Success",
+  "data": [
+    {
+      "ifname": "Tailscale",
+      "descr": "Tailscale Interface Group (DO NOT EDIT/DELETE!)",
+      "members": ""
+    },
+    {
+      "members": "wan lan opt1 opt2 opt4 opt5 opt6 opt7 opt8 opt9 opt10",
+      "descr": "",
+      "ifname": "AllInterfaces"
+    }
+  ]
+}

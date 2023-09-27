@@ -1,0 +1,36 @@
+{
+  "status": "ok",
+  "code": 200,
+  "return": 0,
+  "message": "Success",
+  "data": {
+    "WAN1_DHCP": {
+      "interface": "igb0",
+      "gateway": "1.1.1.1",
+      "name": "WAN1_DHCP",
+      "weight": "1",
+      "ipprotocol": "inet",
+      "descr": "Interface WAN1_DHCP Gateway",
+      "gw_down_kill_states": "",
+      "monitor": "75.75.75.75",
+      "dynamic": true,
+      "friendlyiface": "wan",
+      "friendlyifdescr": "WAN1",
+      "isdefaultgw": true,
+      "attribute": 2,
+      "tiername": "Tier 1 (IPv4)"
+    },
+    "WAN1_DHCP6": {
+      "dynamic": false,
+      "ipprotocol": "inet6",
+      "gateway": null,
+      "interface": "igb0",
+      "friendlyiface": "wan",
+      "friendlyifdescr": "WAN1",
+      "name": "WAN1_DHCP6",
+      "attribute": "system",
+      "descr": "Interface WAN1_DHCP6 Gateway",
+      "tiername": ""
+    }
+  }
+}

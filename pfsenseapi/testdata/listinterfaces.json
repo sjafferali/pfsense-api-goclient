@@ -1,0 +1,48 @@
+{
+  "status": "ok",
+  "code": 200,
+  "return": 0,
+  "message": "Success",
+  "data": {
+    "wan": {
+      "enable": "",
+      "if": "igb0",
+      "descr": "WAN1",
+      "alias-address": "",
+      "alias-subnet": "32",
+      "ipaddr": "dhcp",
+      "dhcprejectfrom": "",
+      "adv_dhcp_pt_timeout": "",
+      "adv_dhcp_pt_retry": "",
+      "adv_dhcp_pt_select_timeout": "",
+      "adv_dhcp_pt_reboot": "",
+      "adv_dhcp_pt_backoff_cutoff": "",
+      "adv_dhcp_pt_initial_interval": "",
+      "adv_dhcp_pt_values": "SavedCfg",
+      "adv_dhcp_send_options": "",
+      "adv_dhcp_request_options": "",
+      "adv_dhcp_required_options": "",
+      "adv_dhcp_option_modifiers": "",
+      "adv_dhcp_config_advanced": "",
+      "adv_dhcp_config_file_override": "",
+      "adv_dhcp_config_file_override_path": "",
+      "ipaddrv6": "dhcp6",
+      "dhcp6-duid": "",
+      "dhcp6-ia-pd-len": "0",
+      "adv_dhcp6_prefix_selected_interface": "wan",
+      "blockpriv": "on",
+      "blockbogons": "on"
+    },
+    "lan": {
+      "enable": "",
+      "if": "igb1",
+      "descr": "MGMT",
+      "spoofmac": "",
+      "ipaddr": "192.168.1.1",
+      "subnet": "24",
+      "ipaddrv6": "track6",
+      "track6-interface": "wan",
+      "track6-prefix-id": "0"
+    }
+  }
+}
