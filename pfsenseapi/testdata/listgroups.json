@@ -1,0 +1,28 @@
+{
+  "status": "ok",
+  "code": 200,
+  "return": 0,
+  "message": "Success",
+  "data": [
+    {
+      "name": "admins",
+      "description": "System Administrators",
+      "scope": "system",
+      "gid": 1999,
+      "member": [
+        0
+      ],
+      "priv": [
+        "page-all"
+      ]
+    },
+    {
+      "name": "all",
+      "description": "All Users",
+      "scope": "system",
+      "gid": 1998,
+      "member": [],
+      "priv": []
+    }
+  ]
+}
