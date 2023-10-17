@@ -56,7 +56,8 @@ func TestUserService_CreateGroup(t *testing.T) {
 	defer server.Close()
 
 	newClient := NewClientWithNoAuth(server.URL)
-	err := newClient.User.CreateGroup(context.Background(), GroupRequest{})
+	response, err := newClient.User.CreateGroup(context.Background(), GroupRequest{})
+	require.NotNil(t, response)
 	require.NoError(t, err)
 }
 
