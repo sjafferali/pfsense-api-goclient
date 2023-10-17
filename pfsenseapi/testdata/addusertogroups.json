@@ -1,0 +1,9 @@
+{
+  "status": "ok",
+  "code": 200,
+  "return": 0,
+  "message": "Success",
+  "data": [
+    "admins"
+  ]
+}

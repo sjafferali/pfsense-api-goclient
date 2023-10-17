@@ -143,3 +143,67 @@ func TestUserService_DeleteGroup(t *testing.T) {
 	err := newClient.User.DeleteGroup(context.Background(), "admin")
 	require.NoError(t, err)
 }
+
+func TestUserService_RemoveUserFromGroup(t *testing.T) {
+	data := mustReadFileString(t, "testdata/addusertogroups.json")
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = io.WriteString(w, data)
+	}
+
+	server := httptest.NewServer(http.HandlerFunc(handler))
+	defer server.Close()
+
+	newClient := NewClientWithNoAuth(server.URL)
+	err := newClient.User.RemoveUserFromGroup(context.Background(), "admin", "admins")
+	require.NoError(t, err)
+}
+
+func TestUserService_AddUserToGroups(t *testing.T) {
+	data := mustReadFileString(t, "testdata/addusertogroups.json")
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = io.WriteString(w, data)
+	}
+
+	server := httptest.NewServer(http.HandlerFunc(handler))
+	defer server.Close()
+
+	newClient := NewClientWithNoAuth(server.URL)
+	err := newClient.User.AddUserToGroups(context.Background(), "admin", []string{"admins"})
+	require.NoError(t, err)
+}
+
+func TestUserService_RemovePrivilegeFromUser(t *testing.T) {
+	data := mustReadFileString(t, "testdata/addprivilegestouser.json")
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = io.WriteString(w, data)
+	}
+
+	server := httptest.NewServer(http.HandlerFunc(handler))
+	defer server.Close()
+
+	newClient := NewClientWithNoAuth(server.URL)
+	err := newClient.User.RemovePrivilegeFromUser(context.Background(), "admin", "system-xmlrpc-ha-sync")
+	require.NoError(t, err)
+}
+
+func TestUserService_AddPrivilegesToUser(t *testing.T) {
+	data := mustReadFileString(t, "testdata/addprivilegestouser.json")
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = io.WriteString(w, data)
+	}
+
+	server := httptest.NewServer(http.HandlerFunc(handler))
+	defer server.Close()
+
+	newClient := NewClientWithNoAuth(server.URL)
+	err := newClient.User.AddPrivilegesToUser(context.Background(), "admin", []string{"system-xmlrpc-ha-sync"})
+	require.NoError(t, err)
+}
