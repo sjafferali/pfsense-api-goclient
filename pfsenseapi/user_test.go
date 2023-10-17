@@ -73,6 +73,7 @@ func TestUserService_UpdateGroup(t *testing.T) {
 	defer server.Close()
 
 	newClient := NewClientWithNoAuth(server.URL)
-	err := newClient.User.UpdateGroup(context.Background(), "admin", GroupRequest{})
+	response, err := newClient.User.UpdateGroup(context.Background(), "admin", GroupRequest{})
+	require.NotNil(t, response)
 	require.NoError(t, err)
 }
