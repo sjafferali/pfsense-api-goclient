@@ -152,7 +152,11 @@ type dhcpStaticMappingRequestUpdate struct {
 }
 
 // UpdateStaticMapping modifies a DHCP static mapping.
-func (s DHCPService) UpdateStaticMapping(ctx context.Context, idToUpdate int, mappingData DHCPStaticMappingRequest) error {
+func (s DHCPService) UpdateStaticMapping(
+	ctx context.Context,
+	idToUpdate int,
+	mappingData DHCPStaticMappingRequest,
+) (*DHCPStaticMapping, error) {
 	requestData := dhcpStaticMappingRequestUpdate{
 		DHCPStaticMappingRequest: mappingData,
 		Id:                       idToUpdate,
@@ -160,13 +164,18 @@ func (s DHCPService) UpdateStaticMapping(ctx context.Context, idToUpdate int, ma
 
 	jsonData, err := json.Marshal(requestData)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	_, err = s.client.put(ctx, staticMappingEndpoint, nil, jsonData)
+	response, err := s.client.put(ctx, staticMappingEndpoint, nil, jsonData)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+
+	resp := new(createStaticMappingResponse)
+	if err = json.Unmarshal(response, resp); err != nil {
+		return nil, err
+	}
+	return resp.Data, nil
 }
 
 // DeleteStaticMapping deletes a DHCP static mapping.
