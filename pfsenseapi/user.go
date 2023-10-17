@@ -255,7 +255,7 @@ func (s UserService) AddUserToGroups(ctx context.Context, username string, group
 		return err
 	}
 
-	if _, err = s.client.post(ctx, groupMemberEndpoint, nil, jsonData); err != nil {
+	if _, err := s.client.post(ctx, groupMemberEndpoint, nil, jsonData); err != nil {
 		return err
 	}
 	return nil
@@ -310,7 +310,7 @@ func (s UserService) AddPrivilegesToUser(ctx context.Context, username string, p
 		return err
 	}
 
-	if _, err = s.client.post(ctx, privilegeEndpoint, nil, jsonData); err != nil {
+	if _, err := s.client.post(ctx, privilegeEndpoint, nil, jsonData); err != nil {
 		return err
 	}
 	return nil
