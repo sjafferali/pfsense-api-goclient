@@ -207,11 +207,12 @@ func TestUserService_DeleteGroup(t *testing.T) {
 }
 
 func TestUserService_RemoveUserFromGroup(t *testing.T) {
-	data := mustReadFileString(t, "testdata/addusertogroups.json")
+	data := makeResultList(t, mustReadFileString(t, "testdata/addusertogroups.json"))
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		_, _ = io.WriteString(w, data)
+		w.WriteHeader(data.popStatus())
+		_, _ = io.WriteString(w, data.popResult())
 	}
 
 	server := httptest.NewServer(http.HandlerFunc(handler))
@@ -226,11 +227,12 @@ func TestUserService_RemoveUserFromGroup(t *testing.T) {
 }
 
 func TestUserService_AddUserToGroups(t *testing.T) {
-	data := mustReadFileString(t, "testdata/addusertogroups.json")
+	data := makeResultList(t, mustReadFileString(t, "testdata/addusertogroups.json"))
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		_, _ = io.WriteString(w, data)
+		w.WriteHeader(data.popStatus())
+		_, _ = io.WriteString(w, data.popResult())
 	}
 
 	server := httptest.NewServer(http.HandlerFunc(handler))
@@ -245,11 +247,12 @@ func TestUserService_AddUserToGroups(t *testing.T) {
 }
 
 func TestUserService_RemovePrivilegeFromUser(t *testing.T) {
-	data := mustReadFileString(t, "testdata/addprivilegestouser.json")
+	data := makeResultList(t, mustReadFileString(t, "testdata/addprivilegestouser.json"))
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		_, _ = io.WriteString(w, data)
+		w.WriteHeader(data.popStatus())
+		_, _ = io.WriteString(w, data.popResult())
 	}
 
 	server := httptest.NewServer(http.HandlerFunc(handler))
@@ -264,11 +267,12 @@ func TestUserService_RemovePrivilegeFromUser(t *testing.T) {
 }
 
 func TestUserService_AddPrivilegesToUser(t *testing.T) {
-	data := mustReadFileString(t, "testdata/addprivilegestouser.json")
+	data := makeResultList(t, mustReadFileString(t, "testdata/addprivilegestouser.json"))
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		_, _ = io.WriteString(w, data)
+		w.WriteHeader(data.popStatus())
+		_, _ = io.WriteString(w, data.popResult())
 	}
 
 	server := httptest.NewServer(http.HandlerFunc(handler))
@@ -280,42 +284,4 @@ func TestUserService_AddPrivilegesToUser(t *testing.T) {
 
 	err = newClient.User.AddPrivilegesToUser(context.Background(), "admin", []string{"system-xmlrpc-ha-sync"})
 	require.Error(t, err)
-}
-
-func remove[K comparable](slice []K, s int) []K {
-	return append(slice[:s], slice[s+1:]...)
-}
-
-type resultList struct {
-	resultsData   []string
-	resultsStatus []int
-}
-
-func (s *resultList) popResult() string {
-	response := s.resultsData[0]
-
-	s.resultsData = remove(s.resultsData, 0)
-	return response
-}
-
-func (s *resultList) popStatus() int {
-	response := s.resultsStatus[0]
-
-	s.resultsStatus = remove(s.resultsStatus, 0)
-	return response
-}
-
-func makeResultList(t *testing.T, data string) *resultList {
-	return &resultList{
-		resultsData: []string{
-			data,
-			mustReadFileString(t, "testdata/error.json"),
-			mustReadFileString(t, "testdata/badjson.json"),
-		},
-		resultsStatus: []int{
-			http.StatusOK,
-			http.StatusBadRequest,
-			http.StatusOK,
-		},
-	}
 }
