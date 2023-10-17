@@ -15,6 +15,6 @@ jobs:
       - name: Running govulncheck
         uses: Templum/govulncheck-action@v1.0.0
         with:
-          go-version: 1.21.1
+          go-version: 1.21.3
           package: ./...
           vulncheck-version: v1.0.0
