@@ -1,0 +1,18 @@
+{
+  "status": "ok",
+  "code": 200,
+  "return": 0,
+  "message": "Success",
+  "data": {
+    "uid": "2002",
+    "scope": "user",
+    "name": "testing123",
+    "bcrypt-hash": "$2y$10$JDvXIS.ac5yuO.fI5DEtW.K1Xei3USarsVb22Cj6lq1iAwq1jUfQC",
+    "priv": [],
+    "descr": "testing123",
+    "expires": "10/17/2023",
+    "cert": [],
+    "authorizedkeys": "",
+    "ipsecpsk": ""
+  }
+}
