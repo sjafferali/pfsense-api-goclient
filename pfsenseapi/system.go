@@ -409,7 +409,7 @@ func (s SystemService) UpdateCertificate(
 	ctx context.Context,
 	refIDToUpdate string,
 	newCertificateData CertificateUpdateRequest,
-) error {
+) (*Certificate, error) {
 	requestData := certificateUpdateRequest{
 		CertificateUpdateRequest: newCertificateData,
 		Refid:                    refIDToUpdate,
@@ -417,13 +417,18 @@ func (s SystemService) UpdateCertificate(
 
 	jsonData, err := json.Marshal(requestData)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	_, err = s.client.put(ctx, certificateEndpoint, nil, jsonData)
+	response, err := s.client.put(ctx, certificateEndpoint, nil, jsonData)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+
+	resp := new(createCertificateResponse)
+	if err = json.Unmarshal(response, resp); err != nil {
+		return nil, err
+	}
+	return resp.Data, nil
 }
 
 // DNSConfiguration represents the system DNS configuration.
@@ -762,7 +767,11 @@ type tunableRequestUpdate struct {
 }
 
 // UpdateTunable modifies an existing tunable.
-func (s SystemService) UpdateTunable(ctx context.Context, tunableToUpdate string, newTunable TunableRequest) error {
+func (s SystemService) UpdateTunable(
+	ctx context.Context,
+	tunableToUpdate string,
+	newTunable TunableRequest,
+) (*Tunable, error) {
 	requestData := tunableRequestUpdate{
 		TunableRequest: newTunable,
 		Id:             tunableToUpdate,
@@ -770,13 +779,19 @@ func (s SystemService) UpdateTunable(ctx context.Context, tunableToUpdate string
 
 	jsonData, err := json.Marshal(requestData)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	_, err = s.client.put(ctx, tunableEndpoint, nil, jsonData)
+
+	response, err := s.client.put(ctx, tunableEndpoint, nil, jsonData)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+
+	resp := new(createTunableResponse)
+	if err = json.Unmarshal(response, resp); err != nil {
+		return nil, err
+	}
+	return resp.Data, nil
 }
 
 // Version represents the system version.

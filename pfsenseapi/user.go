@@ -106,16 +106,25 @@ func (s UserService) CreateUser(
 }
 
 // UpdateUser updates a user.
-func (s UserService) UpdateUser(ctx context.Context, userData UserRequest) error {
+func (s UserService) UpdateUser(
+	ctx context.Context,
+	userData UserRequest,
+) (*User, error) {
 	jsonData, err := json.Marshal(userData)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	if _, err = s.client.put(ctx, userEndpoint, nil, jsonData); err != nil {
-		return err
+	response, err := s.client.put(ctx, userEndpoint, nil, jsonData)
+	if err != nil {
+		return nil, err
 	}
-	return nil
+
+	resp := new(createUserResponse)
+	if err = json.Unmarshal(response, resp); err != nil {
+		return nil, err
+	}
+	return resp.Data, nil
 }
 
 // Group represents a single user group.
@@ -203,7 +212,11 @@ type groupRequestUpdate struct {
 }
 
 // UpdateGroup modifies an existing group.
-func (s UserService) UpdateGroup(ctx context.Context, groupToUpdate string, newGroupData GroupRequest) error {
+func (s UserService) UpdateGroup(
+	ctx context.Context,
+	groupToUpdate string,
+	newGroupData GroupRequest,
+) (*Group, error) {
 	requestData := groupRequestUpdate{
 		GroupRequest: newGroupData,
 		Id:           groupToUpdate,
@@ -211,13 +224,18 @@ func (s UserService) UpdateGroup(ctx context.Context, groupToUpdate string, newG
 
 	jsonData, err := json.Marshal(requestData)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	_, err = s.client.put(ctx, groupEndpoint, nil, jsonData)
+	response, err := s.client.put(ctx, groupEndpoint, nil, jsonData)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+
+	resp := new(createGroupResponse)
+	if err = json.Unmarshal(response, resp); err != nil {
+		return nil, err
+	}
+	return resp.Data, nil
 }
 
 type userGroupsRequest struct {

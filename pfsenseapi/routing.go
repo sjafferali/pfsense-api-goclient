@@ -116,16 +116,25 @@ func (s RoutingService) DeleteGateway(ctx context.Context, gatewayID int) error 
 }
 
 // UpdateGateway modifies a existing gateway
-func (s RoutingService) UpdateGateway(ctx context.Context, gatewayToUpdate GatewayRequest) error {
+func (s RoutingService) UpdateGateway(
+	ctx context.Context,
+	gatewayToUpdate GatewayRequest,
+) (*Gateway, error) {
 	jsonData, err := json.Marshal(gatewayToUpdate)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	_, err = s.client.put(ctx, gatewayEndpoint, nil, jsonData)
+
+	response, err := s.client.put(ctx, gatewayEndpoint, nil, jsonData)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+
+	resp := new(createGatewayResponse)
+	if err = json.Unmarshal(response, resp); err != nil {
+		return nil, err
+	}
+	return resp.Data, nil
 }
 
 type DefaultGatewayRequest struct {

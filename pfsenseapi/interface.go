@@ -171,7 +171,11 @@ type interfaceRequestUpdate struct {
 }
 
 // UpdateInterface modifies an existing interface.
-func (s InterfaceService) UpdateInterface(ctx context.Context, idToUpdate int, interfaceData InterfaceRequest) error {
+func (s InterfaceService) UpdateInterface(
+	ctx context.Context,
+	idToUpdate int,
+	interfaceData InterfaceRequest,
+) (*Interface, error) {
 	requestData := interfaceRequestUpdate{
 		InterfaceRequest: interfaceData,
 		Id:               strconv.Itoa(idToUpdate),
@@ -179,14 +183,19 @@ func (s InterfaceService) UpdateInterface(ctx context.Context, idToUpdate int, i
 
 	jsonData, err := json.Marshal(requestData)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	_, err = s.client.put(ctx, interfaceEndpoint, nil, jsonData)
+	response, err := s.client.put(ctx, interfaceEndpoint, nil, jsonData)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+
+	resp := new(createInterfaceResponse)
+	if err = json.Unmarshal(response, resp); err != nil {
+		return nil, err
+	}
+	return resp.Data, nil
 }
 
 // VLAN represents a single VLAN.
@@ -273,7 +282,11 @@ type vlanRequestUpdate struct {
 }
 
 // UpdateVLAN modifies an existing VLAN.
-func (s InterfaceService) UpdateVLAN(ctx context.Context, idToUpdate int, vlanData VLANRequest) error {
+func (s InterfaceService) UpdateVLAN(
+	ctx context.Context,
+	idToUpdate int,
+	vlanData VLANRequest,
+) (*VLAN, error) {
 	requestData := vlanRequestUpdate{
 		VLANRequest: vlanData,
 		Id:          idToUpdate,
@@ -281,14 +294,19 @@ func (s InterfaceService) UpdateVLAN(ctx context.Context, idToUpdate int, vlanDa
 
 	jsonData, err := json.Marshal(requestData)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	_, err = s.client.put(ctx, interfaceEndpoint, nil, jsonData)
+	response, err := s.client.put(ctx, interfaceEndpoint, nil, jsonData)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+
+	resp := new(createVLANResponse)
+	if err = json.Unmarshal(response, resp); err != nil {
+		return nil, err
+	}
+	return resp.Data, nil
 }
 
 type InterfaceGroup struct {
@@ -371,16 +389,25 @@ type InterfaceGroupRequestUpdate struct {
 }
 
 // UpdateInterfaceGroup updates an existing interface group.
-func (s InterfaceService) UpdateInterfaceGroup(ctx context.Context, groupData InterfaceGroupRequestUpdate) error {
+func (s InterfaceService) UpdateInterfaceGroup(
+	ctx context.Context,
+	groupData InterfaceGroupRequestUpdate,
+) (*InterfaceGroup, error) {
 	jsonData, err := json.Marshal(groupData)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	_, err = s.client.put(ctx, interfaceGroupEndpoint, nil, jsonData)
+
+	response, err := s.client.put(ctx, interfaceGroupEndpoint, nil, jsonData)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+
+	resp := new(createInterfaceGroupResponse)
+	if err = json.Unmarshal(response, resp); err != nil {
+		return nil, err
+	}
+	return resp.Data, nil
 }
 
 type applyInterfaceRequest struct {
