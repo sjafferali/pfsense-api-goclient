@@ -120,17 +120,30 @@ func (s DHCPService) ListStaticMappings(ctx context.Context, netInterface string
 	return resp.Data, nil
 }
 
+type createStaticMappingResponse struct {
+	apiResponse
+	Data *DHCPStaticMapping `json:"data"`
+}
+
 // CreateStaticMapping creates a new DHCP static mapping.
-func (s DHCPService) CreateStaticMapping(ctx context.Context, newStaticMapping DHCPStaticMappingRequest) error {
+func (s DHCPService) CreateStaticMapping(
+	ctx context.Context,
+	newStaticMapping DHCPStaticMappingRequest,
+) (*DHCPStaticMapping, error) {
 	jsonData, err := json.Marshal(newStaticMapping)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	_, err = s.client.post(ctx, staticMappingEndpoint, nil, jsonData)
+	response, err := s.client.post(ctx, staticMappingEndpoint, nil, jsonData)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+
+	resp := new(createStaticMappingResponse)
+	if err = json.Unmarshal(response, resp); err != nil {
+		return nil, err
+	}
+	return resp.Data, nil
 }
 
 type dhcpStaticMappingRequestUpdate struct {

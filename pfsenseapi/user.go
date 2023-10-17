@@ -78,17 +78,31 @@ type UserRequest struct {
 	Username       string   `json:"username"`
 }
 
+type createUserResponse struct {
+	apiResponse
+	Data *User `json:"data"`
+}
+
 // CreateUser creates a new User.
-func (s UserService) CreateUser(ctx context.Context, newUser UserRequest) error {
+func (s UserService) CreateUser(
+	ctx context.Context,
+	newUser UserRequest,
+) (*User, error) {
 	jsonData, err := json.Marshal(newUser)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	if _, err = s.client.post(ctx, userEndpoint, nil, jsonData); err != nil {
-		return err
+	response, err := s.client.post(ctx, userEndpoint, nil, jsonData)
+	if err != nil {
+		return nil, err
 	}
-	return nil
+
+	resp := new(createUserResponse)
+	if err = json.Unmarshal(response, resp); err != nil {
+		return nil, err
+	}
+	return resp.Data, nil
 }
 
 // UpdateUser updates a user.
@@ -156,17 +170,31 @@ type GroupRequest struct {
 	Priv        []string `json:"priv"`
 }
 
+type createGroupResponse struct {
+	apiResponse
+	Data *Group `json:"data"`
+}
+
 // CreateGroup creates a new Group.
-func (s UserService) CreateGroup(ctx context.Context, newGroup GroupRequest) error {
+func (s UserService) CreateGroup(
+	ctx context.Context,
+	newGroup GroupRequest,
+) (*Group, error) {
 	jsonData, err := json.Marshal(newGroup)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	if _, err = s.client.post(ctx, groupEndpoint, nil, jsonData); err != nil {
-		return err
+	response, err := s.client.post(ctx, groupEndpoint, nil, jsonData)
+	if err != nil {
+		return nil, err
 	}
-	return nil
+
+	resp := new(createGroupResponse)
+	if err = json.Unmarshal(response, resp); err != nil {
+		return nil, err
+	}
+	return resp.Data, nil
 }
 
 type groupRequestUpdate struct {
