@@ -220,6 +220,9 @@ func TestUserService_RemoveUserFromGroup(t *testing.T) {
 	newClient := NewClientWithNoAuth(server.URL)
 	err := newClient.User.RemoveUserFromGroup(context.Background(), "admin", "admins")
 	require.NoError(t, err)
+
+	err = newClient.User.RemoveUserFromGroup(context.Background(), "admin", "admins")
+	require.Error(t, err)
 }
 
 func TestUserService_AddUserToGroups(t *testing.T) {
@@ -236,6 +239,9 @@ func TestUserService_AddUserToGroups(t *testing.T) {
 	newClient := NewClientWithNoAuth(server.URL)
 	err := newClient.User.AddUserToGroups(context.Background(), "admin", []string{"admins"})
 	require.NoError(t, err)
+
+	err = newClient.User.AddUserToGroups(context.Background(), "admin", []string{"admins"})
+	require.Error(t, err)
 }
 
 func TestUserService_RemovePrivilegeFromUser(t *testing.T) {
@@ -252,6 +258,9 @@ func TestUserService_RemovePrivilegeFromUser(t *testing.T) {
 	newClient := NewClientWithNoAuth(server.URL)
 	err := newClient.User.RemovePrivilegeFromUser(context.Background(), "admin", "system-xmlrpc-ha-sync")
 	require.NoError(t, err)
+
+	err = newClient.User.RemovePrivilegeFromUser(context.Background(), "admin", "system-xmlrpc-ha-sync")
+	require.Error(t, err)
 }
 
 func TestUserService_AddPrivilegesToUser(t *testing.T) {
@@ -268,6 +277,9 @@ func TestUserService_AddPrivilegesToUser(t *testing.T) {
 	newClient := NewClientWithNoAuth(server.URL)
 	err := newClient.User.AddPrivilegesToUser(context.Background(), "admin", []string{"system-xmlrpc-ha-sync"})
 	require.NoError(t, err)
+
+	err = newClient.User.AddPrivilegesToUser(context.Background(), "admin", []string{"system-xmlrpc-ha-sync"})
+	require.Error(t, err)
 }
 
 func remove[K comparable](slice []K, s int) []K {
