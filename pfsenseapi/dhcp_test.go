@@ -58,3 +58,29 @@ func TestDHCPService_ListStaticMappings(t *testing.T) {
 	require.NoError(t, err)
 	require.Len(t, response, 1)
 }
+
+func TestDHCPService_UpdateDHCPConfiguration(t *testing.T) {
+	data := makeResultList(t, mustReadFileString(t, "testdata/dhcpconfiguration.json"))
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(data.popStatus())
+		_, _ = io.WriteString(w, data.popResult())
+	}
+
+	server := httptest.NewServer(http.HandlerFunc(handler))
+	defer server.Close()
+
+	newClient := NewClientWithNoAuth(server.URL)
+	response, err := newClient.DHCP.UpdateServerConfiguration(context.Background(), DHCPServerConfigurationRequest{})
+	require.NotNil(t, response)
+	require.NoError(t, err)
+
+	response, err = newClient.DHCP.UpdateServerConfiguration(context.Background(), DHCPServerConfigurationRequest{})
+	require.Nil(t, response)
+	require.Error(t, err)
+
+	response, err = newClient.DHCP.UpdateServerConfiguration(context.Background(), DHCPServerConfigurationRequest{})
+	require.Nil(t, response)
+	require.Error(t, err)
+}
