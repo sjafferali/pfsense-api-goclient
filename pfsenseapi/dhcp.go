@@ -179,7 +179,11 @@ func (s DHCPService) UpdateStaticMapping(
 }
 
 // DeleteStaticMapping deletes a DHCP static mapping.
-func (s DHCPService) DeleteStaticMapping(ctx context.Context, mappingInterface string, idToDelete int) error {
+func (s DHCPService) DeleteStaticMapping(
+	ctx context.Context,
+	mappingInterface string,
+	idToDelete int,
+) error {
 	_, err := s.client.delete(
 		ctx,
 		staticMappingEndpoint,
