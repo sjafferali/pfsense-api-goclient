@@ -13,11 +13,12 @@ import (
 )
 
 func TestDHCPService_ListLeases(t *testing.T) {
-	data := mustReadFileString(t, "testdata/listleases.json")
+	data := makeResultList(t, mustReadFileString(t, "testdata/listleases.json"))
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		_, _ = io.WriteString(w, data)
+		w.WriteHeader(data.popStatus())
+		_, _ = io.WriteString(w, data.popResult())
 	}
 
 	server := httptest.NewServer(http.HandlerFunc(handler))
@@ -27,6 +28,14 @@ func TestDHCPService_ListLeases(t *testing.T) {
 	response, err := newClient.DHCP.ListLeases(context.Background())
 	require.NoError(t, err)
 	require.Len(t, response, 1)
+
+	response, err = newClient.DHCP.ListLeases(context.Background())
+	require.Error(t, err)
+	require.Nil(t, response)
+
+	response, err = newClient.DHCP.ListLeases(context.Background())
+	require.Error(t, err)
+	require.Nil(t, response)
 }
 
 func TestDHCPService_ListStaticMappings(t *testing.T) {
