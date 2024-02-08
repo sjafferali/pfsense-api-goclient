@@ -199,31 +199,72 @@ func (s FirewallService) Apply(ctx context.Context) error {
 }
 
 type FirewallRule struct {
-	Id           string            `json:"id"`
-	Tracker      string            `json:"tracker"`
-	Type         string            `json:"type"`
-	Interface    string            `json:"interface"`
-	Ipprotocol   string            `json:"ipprotocol"`
-	Tag          string            `json:"tag"`
-	Tagged       string            `json:"tagged"`
-	Max          string            `json:"max"`
-	MaxSrcNodes  string            `json:"max-src-nodes"`
-	MaxSrcConn   string            `json:"max-src-conn"`
-	MaxSrcStates string            `json:"max-src-states"`
-	Statetimeout string            `json:"statetimeout"`
-	Statetype    string            `json:"statetype"`
-	Os           string            `json:"os"`
-	Source       map[string]string `json:"source"`
-	Destination  map[string]string `json:"destination"`
-	Descr        string            `json:"descr"`
+	ID           string          `json:"id"`
+	AckQueue     string          `json:"ackqueue,omitempty"`
+	Direction    string          `json:"direction"`
+	DefaultQueue string          `json:"defaultqueue,omitempty"`
+	Disabled     bool            `json:"disabled"`
+	ICMPType     string          `json:"icmptype,omitempty"`
+	Dnpipe       string          `json:"dnpipe,omitempty"`
+	TCPFlags1    string          `json:"tcpflags1"`
+	TCPFlags2    string          `json:"tcpflags2"`
+	Floating     string          `json:"floating"`
+	Quick        string          `json:"quick"`
+	Protocol     string          `json:"protocol"`
+	Sched        string          `json:"sched"`
+	Gateway      string          `json:"gateway"`
+	Tracker      JSONInt         `json:"tracker"`
+	Type         string          `json:"type"`
+	PDNPipe      string          `json:"pdnpipe,omitempty"`
+	Log          TrueIfPresent   `json:"log"`
+	Interface    string          `json:"interface"`
+	IPProtocol   string          `json:"ipprotocol"`
+	Tag          string          `json:"tag"`
+	Tagged       string          `json:"tagged"`
+	Max          string          `json:"max"`
+	MaxSrcNodes  string          `json:"max-src-nodes"`
+	MaxSrcConn   string          `json:"max-src-conn"`
+	MaxSrcStates string          `json:"max-src-states"`
+	Statetimeout string          `json:"statetimeout"`
+	Statetype    string          `json:"statetype"`
+	Os           string          `json:"os"`
+	Source       *FirewallTarget `json:"source,omitempty"`
+	Destination  *FirewallTarget `json:"destination,omitempty"`
+	Descr        string          `json:"descr"`
 	Updated      struct {
-		Time     string `json:"time"`
-		Username string `json:"username"`
+		Time     JSONInt `json:"time"`
+		Username string  `json:"username"`
 	} `json:"updated"`
 	Created struct {
-		Time     string `json:"time"`
-		Username string `json:"username"`
+		Time     JSONInt `json:"time"`
+		Username string  `json:"username"`
 	} `json:"created"`
+}
+
+type FirewallTarget struct {
+	Network string        `json:"network,omitempty"`
+	Address string        `json:"address,omitempty"`
+	Not     TrueIfPresent `json:"not,omitempty"`
+	Any     TrueIfPresent `json:"any,omitempty"`
+	Port    string        `json:"port,omitempty"`
+}
+
+func (t *FirewallTarget) TargetString() string {
+	if t.Any {
+		return "any"
+	}
+
+	prefix := ""
+
+	if t.Not {
+		prefix = "!"
+	}
+
+	if t.Network != "" {
+		return prefix + t.Network
+	}
+
+	return prefix + t.Address
 }
 
 type firewallRuleListResponse struct {
@@ -263,30 +304,30 @@ func (s FirewallService) DeleteRule(ctx context.Context, tracker int, apply bool
 }
 
 type FirewallRuleRequest struct {
-	AckQueue     string   `json:"ackqueue"`
-	DefaultQueue string   `json:"defaultqueue"`
-	Descr        string   `json:"descr"`
-	Direction    string   `json:"direction"`
+	AckQueue     string   `json:"ackqueue,omitempty"`
+	DefaultQueue string   `json:"defaultqueue,omitempty"`
+	Descr        string   `json:"descr,omitempty"`
+	Direction    string   `json:"direction,omitempty"`
 	Disabled     bool     `json:"disabled"`
-	Dnpipe       string   `json:"dnpipe"`
-	Dst          string   `json:"dst"`
-	DstPort      string   `json:"dstport"`
+	DNPipe       string   `json:"dnpipe,omitempty"`
+	Dst          string   `json:"dst,omitempty"`
+	DstPort      string   `json:"dstport,omitempty"`
 	Floating     bool     `json:"floating"`
-	Gateway      string   `json:"gateway"`
-	IcmpType     []string `json:"icmptype"`
+	Gateway      string   `json:"gateway,omitempty"`
+	ICMPType     []string `json:"icmptype,omitempty"`
 	Interface    []string `json:"interface"`
-	IpProtocol   string   `json:"ipprotocol"`
+	IPProtocol   string   `json:"ipprotocol,omitempty"`
 	Log          bool     `json:"log"`
-	Pdnpipe      string   `json:"pdnpipe"`
-	Protocol     string   `json:"protocol"`
-	Quick        bool     `json:"quick"`
-	Sched        string   `json:"sched"`
-	Src          string   `json:"src"`
-	SrcPort      string   `json:"srcport"`
-	StateType    string   `json:"statetype"`
-	TcpFlagsAny  bool     `json:"tcpflags_any"`
-	TcpFlags1    []string `json:"tcpflags1"`
-	TcpFlags2    []string `json:"tcpflags2"`
+	PDNPipe      string   `json:"pdnpipe,omitempty"`
+	Protocol     string   `json:"protocol,omitempty"`
+	Quick        bool     `json:"quick,omitempty"`
+	Sched        string   `json:"sched,omitempty"`
+	Src          string   `json:"src,omitempty"`
+	SrcPort      string   `json:"srcport,omitempty"`
+	StateType    string   `json:"statetype,omitempty"`
+	TCPFlagsAny  bool     `json:"tcpflags_any"`
+	TCPFlags1    []string `json:"tcpflags1,omitempty"`
+	TCPFlags2    []string `json:"tcpflags2,omitempty"`
 	Top          bool     `json:"top"`
 	Type         string   `json:"type"`
 }
@@ -315,6 +356,7 @@ func (s FirewallService) CreateRule(
 	if err != nil {
 		return nil, err
 	}
+
 	response, err := s.client.post(ctx, ruleEndpoint, nil, jsonData)
 	if err != nil {
 		return nil, err
@@ -357,6 +399,7 @@ func (s FirewallService) UpdateRule(
 	}
 
 	resp := new(createRuleResponse)
+
 	if err = json.Unmarshal(response, resp); err != nil {
 		return nil, err
 	}
