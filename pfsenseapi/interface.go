@@ -339,6 +339,26 @@ func (s InterfaceService) ListInterfaceGroups(ctx context.Context) ([]*Interface
 	return resp.Data, nil
 }
 
+// PutInterfaceGroups replaces all interface groups with the given list.
+func (s InterfaceService) PutInterfaceGroups(ctx context.Context, groups []*InterfaceGroupRequest) ([]*InterfaceGroup, error) {
+	jsonData, err := json.Marshal(groups)
+	if err != nil {
+		return nil, fmt.Errorf("error marshalling request payload into json: %w", err)
+	}
+
+	response, err := s.client.put(ctx, interfaceGroupsEndpoint, nil, jsonData)
+	if err != nil {
+		return nil, err
+	}
+
+	resp := new(interfaceGroupListResponse)
+	if err = json.Unmarshal(response, resp); err != nil {
+		return nil, fmt.Errorf("error unmarshalling response: %w", err)
+	}
+
+	return resp.Data, nil
+}
+
 // GetInterfaceGroup returns the interface group with the given ID.
 func (s InterfaceService) GetInterfaceGroup(ctx context.Context, id int) (*InterfaceGroup, error) {
 	response, err := s.client.get(

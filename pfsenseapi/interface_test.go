@@ -452,3 +452,35 @@ func TestInterfaceService_Apply(t *testing.T) {
 	err = newClient.Interface.Apply(context.Background())
 	require.Error(t, err)
 }
+
+func TestInterfaceService_PutInterfaceGroups(t *testing.T) {
+	data := mustReadFileString(t, "testdata/multipleinterfacegroup.json")
+
+	server := setupTestServer(t, data)
+	defer server.Close()
+
+	newClient := NewClientWithNoAuth(server.URL)
+	newGroups := []*InterfaceGroupRequest{
+		{
+			Ifname:  "group1",
+			Members: []string{"em1", "em2"},
+			Descr:   "Test Group 1",
+		},
+		{
+			Ifname:  "group2",
+			Members: []string{"em3", "em4"},
+			Descr:   "Test Group 2",
+		},
+	}
+	response, err := newClient.Interface.PutInterfaceGroups(context.Background(), newGroups)
+	require.NoError(t, err)
+	require.Len(t, response, 2)
+
+	response, err = newClient.Interface.PutInterfaceGroups(context.Background(), newGroups)
+	require.Error(t, err)
+	require.Nil(t, response)
+
+	response, err = newClient.Interface.PutInterfaceGroups(context.Background(), newGroups)
+	require.Error(t, err)
+	require.Nil(t, response)
+}
