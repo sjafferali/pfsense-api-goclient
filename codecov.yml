@@ -10,3 +10,5 @@ coverage:
     patch:
       default:
         informational: true
+codecov:
+  branch: stable # set new Default branch
