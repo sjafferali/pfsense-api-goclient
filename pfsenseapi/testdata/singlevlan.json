@@ -1,0 +1,12 @@
+{
+  "status": "ok",
+  "code": 200,
+  "return": 0,
+  "message": "VLAN created successfully",
+  "data": {
+    "if": "em1",
+    "tag": 100,
+    "descr": "Test VLAN",
+    "id": 1
+  }
+}

@@ -7,26 +7,23 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"golang.org/x/exp/slices"
 	"io"
 	"net/http"
 	"time"
+
+	"golang.org/x/exp/slices"
 )
 
 var (
 	defaultTimeout = 5 * time.Second
 
 	// noAuthEndpoints is a list of endpoints that require no authentication
-	noAuthEndpoints = []string{
-		apiErrorEndpoint,
-	}
+	noAuthEndpoints = []string{}
 
 	// localAuthEndpoints is a list of endpoints that always require local
 	// authentication. This overrides the default behavior of authenticating with
 	// whatever client the Client is constructed with.
-	localAuthEndpoints = []string{
-		tokenEndpoint,
-	}
+	localAuthEndpoints = []string{}
 )
 
 // Client provides client Methods
@@ -34,14 +31,7 @@ type Client struct {
 	client *http.Client
 	Cfg    Config
 
-	System    *SystemService
-	Token     *TokenService
-	DHCP      *DHCPService
-	Status    *StatusService
 	Interface *InterfaceService
-	Routing   *RoutingService
-	Firewall  *FirewallService
-	User      *UserService
 }
 
 // Config provides configuration for the client. These values are only read in
@@ -86,14 +76,7 @@ func NewClient(config Config) *Client {
 		Cfg:    config,
 		client: httpclient,
 	}
-	newClient.System = &SystemService{client: newClient}
-	newClient.Token = &TokenService{client: newClient}
-	newClient.DHCP = &DHCPService{client: newClient}
-	newClient.Status = &StatusService{client: newClient}
 	newClient.Interface = &InterfaceService{client: newClient}
-	newClient.Routing = &RoutingService{client: newClient}
-	newClient.Firewall = &FirewallService{client: newClient}
-	newClient.User = &UserService{client: newClient}
 	return newClient
 }
 
@@ -251,12 +234,13 @@ func (c *Client) getToken(ctx context.Context) (string, error) {
 
 // generateToken creates a new token and updates client
 func (c *Client) generateToken(ctx context.Context) (string, error) {
-	token, err := c.Token.CreateAccessToken(ctx)
-	if err != nil {
-		return "", err
-	}
-	c.Cfg.JWTToken = token
-	return token, nil
+	/*	token, err := c.Token.CreateAccessToken(ctx)
+		if err != nil {
+			return "", err
+		}
+		c.Cfg.JWTToken = token
+		return token, nil*/
+	return "", nil
 }
 
 func (c *Client) get(ctx context.Context, endpoint string, queryMap map[string]string) ([]byte, error) {
@@ -293,6 +277,33 @@ func (c *Client) post(ctx context.Context, endpoint string, queryMap map[string]
 	defer func() {
 		_, _ = io.Copy(io.Discard, res.Body)
 		_ = res.Body.Close()
+	}()
+
+	respbody, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	if res.StatusCode < 200 || res.StatusCode > 299 {
+		resp := new(apiResponse)
+		if err = json.Unmarshal(respbody, resp); err != nil {
+			return nil, fmt.Errorf("non 2xx response code received: %d", res.StatusCode)
+		}
+		return nil, fmt.Errorf("%s, response code %d", resp.Message, res.StatusCode)
+	}
+
+	return respbody, nil
+}
+
+// patch makes a patch request to the given endpoint with the given queryMap and body.
+func (c *Client) patch(ctx context.Context, endpoint string, queryMap map[string]string, body []byte) ([]byte, error) {
+	res, err := c.do(ctx, http.MethodPatch, endpoint, queryMap, body)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		_, _ = io.Copy(io.Discard, res.Body)
+		_ = res.Body.Close
 	}()
 
 	respbody, err := io.ReadAll(res.Body)

@@ -1,0 +1,20 @@
+{
+  "status": "ok",
+  "code": 200,
+  "return": 0,
+  "message": "VLANs fetched successfully",
+  "data": [
+    {
+      "if": "em1",
+      "tag": 100,
+      "descr": "Test VLAN",
+      "id": 1
+    },
+    {
+      "if": "em2",
+      "tag": 200,
+      "descr": "Test VLAN 2",
+      "id": 2
+    }
+  ]
+}

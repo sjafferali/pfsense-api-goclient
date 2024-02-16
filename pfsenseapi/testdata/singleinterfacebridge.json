@@ -1,0 +1,12 @@
+{
+  "status": "ok",
+  "code": 200,
+  "return": 0,
+  "message": "Interface Bridge created successfully",
+  "data": {
+    "members": ["em1", "em2"],
+    "descr": "Test Bridge",
+    "bridgeif": "bridge0",
+    "id": "test_bridge"
+  }
+}
