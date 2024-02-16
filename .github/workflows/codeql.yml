@@ -49,7 +49,10 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-
+    - uses: actions/setup-go@v5
+      with:
+        go-version: 1.21.7
+        cache: false
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
