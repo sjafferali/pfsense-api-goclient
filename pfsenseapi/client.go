@@ -358,20 +358,20 @@ func (c *Client) delete(ctx context.Context, endpoint string, queryMap map[strin
 		_ = res.Body.Close()
 	}()
 
-	body, err := io.ReadAll(res.Body)
+	respbody, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
 	}
 
 	if res.StatusCode < 200 || res.StatusCode > 299 {
 		resp := new(apiResponse)
-		if err = json.Unmarshal(body, resp); err != nil {
+		if err = json.Unmarshal(respbody, resp); err != nil {
 			return nil, fmt.Errorf("non 2xx response code received: %d", res.StatusCode)
 		}
 		return nil, fmt.Errorf("%s, response code %d", resp.Message, res.StatusCode)
 	}
 
-	return body, nil
+	return respbody, nil
 }
 
 type apiResponse struct {
