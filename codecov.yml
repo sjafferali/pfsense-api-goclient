@@ -10,5 +10,3 @@ coverage:
     patch:
       default:
         informational: true
-codecov:
-  branch: v2
