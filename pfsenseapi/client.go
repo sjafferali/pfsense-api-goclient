@@ -79,7 +79,6 @@ func NewClient(config Config) *Client {
 	}
 	newClient.Interface = &InterfaceService{client: newClient}
 	newClient.User = &UserService{client: newClient}
-  
 	return newClient
 }
 

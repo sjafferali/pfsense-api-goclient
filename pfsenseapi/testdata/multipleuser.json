@@ -1,0 +1,34 @@
+{
+  "code": 0,
+  "message": "OK",
+  "data": [
+    {
+      "id": 1,
+      "uid": 1001,
+      "name": "user1",
+      "password": "password1",
+      "scope": "user",
+      "priv": ["priv1", "priv2"],
+      "disabled": false,
+      "descr": "User 1",
+      "expires": "2023-12-31",
+      "cert": ["cert1", "cert2"],
+      "authorizedkeys": "key1",
+      "ipsecpsk": "psk1"
+    },
+    {
+      "id": 2,
+      "uid": 1002,
+      "name": "user2",
+      "password": "password2",
+      "scope": "user",
+      "priv": ["priv3", "priv4"],
+      "disabled": false,
+      "descr": "User 2",
+      "expires": "2024-12-31",
+      "cert": ["cert3", "cert4"],
+      "authorizedkeys": "key2",
+      "ipsecpsk": "psk2"
+    }
+  ]
+}

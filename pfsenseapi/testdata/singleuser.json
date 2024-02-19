@@ -1,0 +1,18 @@
+{
+  "code": 0,
+  "message": "OK",
+  "data": {
+    "id": 1,
+    "uid": 1001,
+    "name": "user1",
+    "password": "password1",
+    "scope": "user",
+    "priv": ["priv1", "priv2"],
+    "disabled": false,
+    "descr": "User 1",
+    "expires": "2023-12-31",
+    "cert": ["cert1", "cert2"],
+    "authorizedkeys": "key1",
+    "ipsecpsk": "psk1"
+  }
+}

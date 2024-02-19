@@ -1,0 +1,24 @@
+{
+  "code": 0,
+  "message": "OK",
+  "data": [
+    {
+      "id": 1,
+      "gid": 2001,
+      "name": "group1",
+      "scope": "group",
+      "description": "Group 1",
+      "member": ["user1", "user2"],
+      "priv": ["priv1", "priv2"]
+    },
+    {
+      "id": 2,
+      "gid": 2002,
+      "name": "group2",
+      "scope": "group",
+      "description": "Group 2",
+      "member": ["user3", "user4"],
+      "priv": ["priv3", "priv4"]
+    }
+  ]
+}
