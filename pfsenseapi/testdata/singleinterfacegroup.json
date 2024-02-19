@@ -1,0 +1,12 @@
+{
+  "status": "ok",
+  "code": 200,
+  "return": 0,
+  "message": "Interface Group created successfully",
+  "data": {
+    "ifname": "group1",
+    "members": ["em1", "em2"],
+    "descr": "Test Group",
+    "id": 1
+  }
+}

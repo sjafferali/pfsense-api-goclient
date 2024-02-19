@@ -1,0 +1,6 @@
+{
+  "status": "bad request",
+  "code": 400,
+  "return": 5001,
+  "message": "User does not exist",
+  "data": []

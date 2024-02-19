@@ -1,0 +1,20 @@
+{
+  "status": "ok",
+  "code": 200,
+  "return": 0,
+  "message": "Interface Groups fetched successfully",
+  "data": [
+    {
+      "ifname": "group1",
+      "members": ["em1", "em2"],
+      "descr": "Test Group",
+      "id": 1
+    },
+    {
+      "ifname": "group2",
+      "members": ["em3", "em4"],
+      "descr": "Test Group 2",
+      "id": 2
+    }
+  ]
+}

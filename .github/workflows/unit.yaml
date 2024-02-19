@@ -2,21 +2,27 @@ name: Unit
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, v2 ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, v2 ]
 
 jobs:
 
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Set up Go
-      uses: actions/setup-go@v2
+      uses: actions/setup-go@v5
       with:
-        go-version: 1.19
+        go-version: 1.21.7
+        cache: true
 
-    - name: Test
-      run: go test -v ./...
+    - name: Run go test
+      run: go test -v -race -coverprofile coverage.txt -covermode atomic ./...
+
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v4
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_ORG_TOKEN }}

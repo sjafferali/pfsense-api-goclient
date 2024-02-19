@@ -1,0 +1,12 @@
+comment: false
+coverage:
+  range: 4..7
+  round: down
+  precision: 2
+  status:
+    project:
+      default:
+        informational: true
+    patch:
+      default:
+        informational: true

@@ -1,0 +1,26 @@
+{
+  "status": "ok",
+  "code": 200,
+  "return": 0,
+  "message": "Interfaces fetched successfully",
+  "data": [
+    {
+      "if": "em1",
+      "enable": true,
+      "descr": "Test Interface",
+      "typev4": "staticv4",
+      "ipaddr": "192.168.1.1",
+      "subnet": 24,
+      "id": "test_interface"
+    },
+    {
+      "if": "em2",
+      "enable": true,
+      "descr": "Test Interface 2",
+      "typev4": "staticv4",
+      "ipaddr": "192.168.1.2",
+      "subnet": 24,
+      "id": "test_interface_2"
+    }
+  ]
+}
