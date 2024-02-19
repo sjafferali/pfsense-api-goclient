@@ -378,8 +378,8 @@ func (c *Client) delete(ctx context.Context, endpoint string, queryMap map[strin
 }
 
 type apiResponse struct {
-	Status  string `json:"status"`
-	Code    int    `json:"code"`
-	Return  int    `json:"return"`
-	Message string `json:"message"`
+	Status     string `json:"status"`
+	Code       int    `json:"code"`
+	ResponseId string `json:"response_id"`
+	Message    string `json:"message"`
 }
