@@ -72,7 +72,7 @@ func (s InterfaceService) ListInterfaces(ctx context.Context) ([]*Interface, err
 // DeleteInterface deletes the interface. The interfaceID can be specified in
 // either the interface's descriptive name, the pfSense ID (wan, lan, optx), or
 // the physical interface id (e.g. igb0).
-func (s InterfaceService) DeleteInterface(ctx context.Context, interfaceID string) error {
+func (s InterfaceService) DeleteInterface(ctx context.Context, interfaceID string) (*Interface, error) {
 	response, err := s.client.delete(
 		ctx,
 		interfaceEndpoint,
@@ -81,15 +81,15 @@ func (s InterfaceService) DeleteInterface(ctx context.Context, interfaceID strin
 		},
 	)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	resp := new(apiResponse)
+	resp := new(createInterfaceResponse)
 	if err = json.Unmarshal(response, resp); err != nil {
-		return fmt.Errorf("error unmarshalling response: %w", err)
+		return nil, fmt.Errorf("error unmarshalling response: %w", err)
 	}
 
-	return nil
+	return resp.Data, nil
 }
 
 type InterfaceRequest struct {
@@ -231,7 +231,7 @@ func (s InterfaceService) GetVLAN(ctx context.Context, id int) (*VLAN, error) {
 }
 
 // DeleteVLAN deletes a VLAN.
-func (s InterfaceService) DeleteVLAN(ctx context.Context, idToDelete int) error {
+func (s InterfaceService) DeleteVLAN(ctx context.Context, idToDelete int) (*VLAN, error) {
 	response, err := s.client.delete(
 		ctx,
 		interfaceVLANEndpoint,
@@ -240,15 +240,14 @@ func (s InterfaceService) DeleteVLAN(ctx context.Context, idToDelete int) error 
 		},
 	)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	resp := new(apiResponse)
+	resp := new(createVLANResponse)
 	if err = json.Unmarshal(response, resp); err != nil {
-		return fmt.Errorf("error unmarshalling response: %w", err)
+		return nil, fmt.Errorf("error unmarshalling response: %w", err)
 	}
-
-	return nil
+	return resp.Data, nil
 }
 
 type VLANRequest struct {
@@ -381,7 +380,7 @@ func (s InterfaceService) GetInterfaceGroup(ctx context.Context, id int) (*Inter
 }
 
 // DeleteInterfaceGroup deletes an interface group.
-func (s InterfaceService) DeleteInterfaceGroup(ctx context.Context, idToDelete int) error {
+func (s InterfaceService) DeleteInterfaceGroup(ctx context.Context, idToDelete int) (*InterfaceGroup, error) {
 	response, err := s.client.delete(
 		ctx,
 		interfaceGroupEndpoint,
@@ -390,15 +389,14 @@ func (s InterfaceService) DeleteInterfaceGroup(ctx context.Context, idToDelete i
 		},
 	)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	resp := new(apiResponse)
+	resp := new(interfaceGroupResponse)
 	if err = json.Unmarshal(response, resp); err != nil {
-		return fmt.Errorf("error unmarshalling response: %w", err)
+		return nil, fmt.Errorf("error unmarshalling response: %w", err)
 	}
-
-	return nil
+	return resp.Data, nil
 }
 
 // InterfaceGroupRequest represents the request to create or update an interface group.
@@ -529,7 +527,7 @@ func (s InterfaceService) GetInterfaceBridge(ctx context.Context, id string) (*I
 }
 
 // DeleteInterfaceBridge deletes a bridge.
-func (s InterfaceService) DeleteInterfaceBridge(ctx context.Context, idToDelete string) error {
+func (s InterfaceService) DeleteInterfaceBridge(ctx context.Context, idToDelete string) (*InterfaceBridge, error) {
 	response, err := s.client.delete(
 		ctx,
 		interfaceBridgeEndpoint,
@@ -538,15 +536,14 @@ func (s InterfaceService) DeleteInterfaceBridge(ctx context.Context, idToDelete 
 		},
 	)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	resp := new(apiResponse)
+	resp := new(interfaceBridgeResponse)
 	if err = json.Unmarshal(response, resp); err != nil {
-		return fmt.Errorf("error unmarshalling response: %w", err)
+		return nil, fmt.Errorf("error unmarshalling response: %w", err)
 	}
-
-	return nil
+	return resp.Data, nil
 }
 
 // CreateInterfaceBridge creates a new bridge.

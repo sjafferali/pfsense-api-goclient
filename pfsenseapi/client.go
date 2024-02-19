@@ -32,6 +32,7 @@ type Client struct {
 	Cfg    Config
 
 	Interface *InterfaceService
+	User      *UserService
 }
 
 // Config provides configuration for the client. These values are only read in
@@ -77,6 +78,8 @@ func NewClient(config Config) *Client {
 		client: httpclient,
 	}
 	newClient.Interface = &InterfaceService{client: newClient}
+	newClient.User = &UserService{client: newClient}
+  
 	return newClient
 }
 
@@ -253,20 +256,25 @@ func (c *Client) get(ctx context.Context, endpoint string, queryMap map[string]s
 		_ = res.Body.Close()
 	}()
 
-	body, err := io.ReadAll(res.Body)
+	respbody, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
 	}
 
 	if res.StatusCode < 200 || res.StatusCode > 299 {
-		resp := new(apiResponse)
-		if err = json.Unmarshal(body, resp); err != nil {
-			return nil, fmt.Errorf("non 2xx response code received: %d", res.StatusCode)
+		err, ok := responseCodeErrorMap[res.StatusCode]
+		if !ok {
+			err = fmt.Errorf("non 2xx response code received: %d", res.StatusCode)
 		}
-		return nil, fmt.Errorf("%s, response code %d", resp.Message, res.StatusCode)
+
+		resp := new(apiResponse)
+		if jsonerr := json.Unmarshal(respbody, resp); jsonerr != nil {
+			return nil, err
+		}
+		return nil, fmt.Errorf("%w: %s", err, resp.Message)
 	}
 
-	return body, nil
+	return respbody, nil
 }
 
 func (c *Client) post(ctx context.Context, endpoint string, queryMap map[string]string, body []byte) ([]byte, error) {
@@ -285,11 +293,16 @@ func (c *Client) post(ctx context.Context, endpoint string, queryMap map[string]
 	}
 
 	if res.StatusCode < 200 || res.StatusCode > 299 {
-		resp := new(apiResponse)
-		if err = json.Unmarshal(respbody, resp); err != nil {
-			return nil, fmt.Errorf("non 2xx response code received: %d", res.StatusCode)
+		err, ok := responseCodeErrorMap[res.StatusCode]
+		if !ok {
+			err = fmt.Errorf("non 2xx response code received: %d", res.StatusCode)
 		}
-		return nil, fmt.Errorf("%s, response code %d", resp.Message, res.StatusCode)
+
+		resp := new(apiResponse)
+		if jsonerr := json.Unmarshal(respbody, resp); jsonerr != nil {
+			return nil, err
+		}
+		return nil, fmt.Errorf("%w: %s", err, resp.Message)
 	}
 
 	return respbody, nil
@@ -312,11 +325,16 @@ func (c *Client) patch(ctx context.Context, endpoint string, queryMap map[string
 	}
 
 	if res.StatusCode < 200 || res.StatusCode > 299 {
-		resp := new(apiResponse)
-		if err = json.Unmarshal(respbody, resp); err != nil {
-			return nil, fmt.Errorf("non 2xx response code received: %d", res.StatusCode)
+		err, ok := responseCodeErrorMap[res.StatusCode]
+		if !ok {
+			err = fmt.Errorf("non 2xx response code received: %d", res.StatusCode)
 		}
-		return nil, fmt.Errorf("%s, response code %d", resp.Message, res.StatusCode)
+
+		resp := new(apiResponse)
+		if jsonerr := json.Unmarshal(respbody, resp); jsonerr != nil {
+			return nil, err
+		}
+		return nil, fmt.Errorf("%w: %s", err, resp.Message)
 	}
 
 	return respbody, nil
@@ -338,11 +356,16 @@ func (c *Client) put(ctx context.Context, endpoint string, queryMap map[string]s
 	}
 
 	if res.StatusCode < 200 || res.StatusCode > 299 {
-		resp := new(apiResponse)
-		if err = json.Unmarshal(respbody, resp); err != nil {
-			return nil, fmt.Errorf("non 2xx response code received: %d", res.StatusCode)
+		err, ok := responseCodeErrorMap[res.StatusCode]
+		if !ok {
+			err = fmt.Errorf("non 2xx response code received: %d", res.StatusCode)
 		}
-		return nil, fmt.Errorf("%s, response code %d", resp.Message, res.StatusCode)
+
+		resp := new(apiResponse)
+		if jsonerr := json.Unmarshal(respbody, resp); jsonerr != nil {
+			return nil, err
+		}
+		return nil, fmt.Errorf("%w: %s", err, resp.Message)
 	}
 
 	return respbody, nil
@@ -364,19 +387,77 @@ func (c *Client) delete(ctx context.Context, endpoint string, queryMap map[strin
 	}
 
 	if res.StatusCode < 200 || res.StatusCode > 299 {
-		resp := new(apiResponse)
-		if err = json.Unmarshal(respbody, resp); err != nil {
-			return nil, fmt.Errorf("non 2xx response code received: %d", res.StatusCode)
+		err, ok := responseCodeErrorMap[res.StatusCode]
+		if !ok {
+			err = fmt.Errorf("non 2xx response code received: %d", res.StatusCode)
 		}
-		return nil, fmt.Errorf("%s, response code %d", resp.Message, res.StatusCode)
+
+		resp := new(apiResponse)
+		if jsonerr := json.Unmarshal(respbody, resp); jsonerr != nil {
+			return nil, err
+		}
+		return nil, fmt.Errorf("%w: %s", err, resp.Message)
 	}
 
 	return respbody, nil
 }
 
 type apiResponse struct {
-	Status  string `json:"status"`
-	Code    int    `json:"code"`
-	Return  int    `json:"return"`
-	Message string `json:"message"`
+	Status     string `json:"status"`
+	Code       int    `json:"code"`
+	ResponseId string `json:"response_id"`
+	Message    string `json:"message"`
 }
+
+var (
+	// ErrBadRequest represents a HTTP 400 error
+	ErrBadRequest = fmt.Errorf("HTTP 400: Bad Request")
+
+	// ErrUnauthorized represents a HTTP 401 error
+	ErrUnauthorized = fmt.Errorf("HTTP 401: Unauthorized")
+
+	// ErrForbidden represents a HTTP 403 error
+	ErrForbidden = fmt.Errorf("HTTP 403: Forbidden")
+
+	// ErrNotFound represents a HTTP 404 error
+	ErrNotFound = fmt.Errorf("HTTP 404: Not Found")
+
+	// ErrMethodNotAllowed represents a HTTP 405 error
+	ErrMethodNotAllowed = fmt.Errorf("HTTP 405: Method Not Allowed")
+
+	// ErrNotAcceptable represents a HTTP 406 error
+	ErrNotAcceptable = fmt.Errorf("HTTP 406: Not Acceptable")
+
+	// ErrConflict represents a HTTP 409 error
+	ErrConflict = fmt.Errorf("HTTP 409: Conflict")
+
+	// ErrUnsupportedMediaType represents a HTTP 415 error
+	ErrUnsupportedMediaType = fmt.Errorf("HTTP 415: Unsupported Media Type")
+
+	// ErrUnprocessableEntity represents a HTTP 422 error
+	ErrUnprocessableEntity = fmt.Errorf("HTTP 422: Unprocessable Entity")
+
+	// ErrFailedDependency represents a HTTP 424 error
+	ErrFailedDependency = fmt.Errorf("HTTP 424: Failed Dependency")
+
+	// ErrInternalServerError represents a HTTP 500 error
+	ErrInternalServerError = fmt.Errorf("HTTP 500: Internal Server Error")
+
+	// ErrServiceUnavailable represents a HTTP 503 error
+	ErrServiceUnavailable = fmt.Errorf("HTTP 503: Service Unavailable")
+
+	responseCodeErrorMap = map[int]error{
+		http.StatusBadRequest:           ErrBadRequest,
+		http.StatusUnauthorized:         ErrUnauthorized,
+		http.StatusForbidden:            ErrForbidden,
+		http.StatusNotFound:             ErrNotFound,
+		http.StatusMethodNotAllowed:     ErrMethodNotAllowed,
+		http.StatusNotAcceptable:        ErrNotAcceptable,
+		http.StatusConflict:             ErrConflict,
+		http.StatusUnsupportedMediaType: ErrUnsupportedMediaType,
+		http.StatusUnprocessableEntity:  ErrUnprocessableEntity,
+		http.StatusFailedDependency:     ErrFailedDependency,
+		http.StatusInternalServerError:  ErrInternalServerError,
+		http.StatusServiceUnavailable:   ErrServiceUnavailable,
+	}
+)

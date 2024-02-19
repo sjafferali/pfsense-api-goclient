@@ -278,63 +278,79 @@ func TestInterfaceService_CreateInterfaceBridge(t *testing.T) {
 }
 
 func TestInterfaceService_DeleteInterface(t *testing.T) {
-	server := setupTestServer(t, "{}")
+	data := mustReadFileString(t, "testdata/singleinterface.json")
+	server := setupTestServer(t, data)
 	defer server.Close()
 
 	newClient := NewClientWithNoAuth(server.URL)
-	err := newClient.Interface.DeleteInterface(context.Background(), "test_interface")
+	response, err := newClient.Interface.DeleteInterface(context.Background(), "test_interface")
 	require.NoError(t, err)
+	require.NotNil(t, response)
 
-	err = newClient.Interface.DeleteInterface(context.Background(), "test_interface")
+	response, err = newClient.Interface.DeleteInterface(context.Background(), "test_interface")
 	require.Error(t, err)
+	require.Nil(t, response)
 
-	err = newClient.Interface.DeleteInterface(context.Background(), "test_interface")
+	response, err = newClient.Interface.DeleteInterface(context.Background(), "test_interface")
 	require.Error(t, err)
+	require.Nil(t, response)
 }
 
 func TestInterfaceService_DeleteVLAN(t *testing.T) {
-	server := setupTestServer(t, "{}")
+	data := mustReadFileString(t, "testdata/singlevlan.json")
+	server := setupTestServer(t, data)
 	defer server.Close()
 
 	newClient := NewClientWithNoAuth(server.URL)
-	err := newClient.Interface.DeleteVLAN(context.Background(), 1)
+	response, err := newClient.Interface.DeleteVLAN(context.Background(), 1)
 	require.NoError(t, err)
+	require.NotNil(t, response)
 
-	err = newClient.Interface.DeleteVLAN(context.Background(), 1)
+	response, err = newClient.Interface.DeleteVLAN(context.Background(), 1)
 	require.Error(t, err)
+	require.Nil(t, response)
 
-	err = newClient.Interface.DeleteVLAN(context.Background(), 1)
+	response, err = newClient.Interface.DeleteVLAN(context.Background(), 1)
 	require.Error(t, err)
+	require.Nil(t, response)
 }
 
 func TestInterfaceService_DeleteInterfaceGroup(t *testing.T) {
-	server := setupTestServer(t, "{}")
+	data := mustReadFileString(t, "testdata/singleinterfacegroup.json")
+	server := setupTestServer(t, data)
 	defer server.Close()
 
 	newClient := NewClientWithNoAuth(server.URL)
-	err := newClient.Interface.DeleteInterfaceGroup(context.Background(), 1)
+	response, err := newClient.Interface.DeleteInterfaceGroup(context.Background(), 1)
 	require.NoError(t, err)
+	require.NotNil(t, response)
 
-	err = newClient.Interface.DeleteInterfaceGroup(context.Background(), 1)
+	response, err = newClient.Interface.DeleteInterfaceGroup(context.Background(), 1)
 	require.Error(t, err)
+	require.Nil(t, response)
 
-	err = newClient.Interface.DeleteInterfaceGroup(context.Background(), 1)
+	response, err = newClient.Interface.DeleteInterfaceGroup(context.Background(), 1)
 	require.Error(t, err)
+	require.Nil(t, response)
 }
 
 func TestInterfaceService_DeleteInterfaceBridge(t *testing.T) {
-	server := setupTestServer(t, "{}")
+	data := mustReadFileString(t, "testdata/singleinterfacebridge.json")
+	server := setupTestServer(t, data)
 	defer server.Close()
 
 	newClient := NewClientWithNoAuth(server.URL)
-	err := newClient.Interface.DeleteInterfaceBridge(context.Background(), "test_bridge")
+	response, err := newClient.Interface.DeleteInterfaceBridge(context.Background(), "test_bridge")
 	require.NoError(t, err)
+	require.NotNil(t, response)
 
-	err = newClient.Interface.DeleteInterfaceBridge(context.Background(), "test_bridge")
+	response, err = newClient.Interface.DeleteInterfaceBridge(context.Background(), "test_bridge")
 	require.Error(t, err)
+	require.Nil(t, response)
 
-	err = newClient.Interface.DeleteInterfaceBridge(context.Background(), "test_bridge")
+	response, err = newClient.Interface.DeleteInterfaceBridge(context.Background(), "test_bridge")
 	require.Error(t, err)
+	require.Nil(t, response)
 }
 
 func TestInterfaceService_UpdateInterface(t *testing.T) {
