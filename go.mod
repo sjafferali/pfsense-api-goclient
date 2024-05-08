@@ -1,6 +1,6 @@
 module github.com/sjafferali/pfsense-api-goclient/v2
 
-go 1.21
+go 1.21.7
 
 require (
 	github.com/markphelps/optional v0.11.0
