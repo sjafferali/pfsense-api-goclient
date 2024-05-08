@@ -4,7 +4,7 @@ go 1.21.7
 
 require (
 	github.com/markphelps/optional v0.11.0
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 	golang.org/x/exp v0.0.0-20221031165847-c99f073a8326
 )
 
