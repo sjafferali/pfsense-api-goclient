@@ -3,6 +3,7 @@ package pfsenseapi
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"strconv"
 )
 
@@ -18,36 +19,55 @@ type InterfaceService service
 
 // Interface represents a single interface.
 type Interface struct {
-	Enable                          string `json:"enable"`
-	If                              string `json:"if"`
-	Descr                           string `json:"descr"`
-	AliasAddress                    string `json:"alias-address"`
-	AliasSubnet                     string `json:"alias-subnet"`
-	Ipaddr                          string `json:"ipaddr"`
-	Dhcprejectfrom                  string `json:"dhcprejectfrom"`
-	AdvDhcpPtTimeout                string `json:"adv_dhcp_pt_timeout"`
-	AdvDhcpPtRetry                  string `json:"adv_dhcp_pt_retry"`
-	AdvDhcpPtSelectTimeout          string `json:"adv_dhcp_pt_select_timeout"`
-	AdvDhcpPtReboot                 string `json:"adv_dhcp_pt_reboot"`
-	AdvDhcpPtBackoffCutoff          string `json:"adv_dhcp_pt_backoff_cutoff"`
-	AdvDhcpPtInitialInterval        string `json:"adv_dhcp_pt_initial_interval"`
-	AdvDhcpPtValues                 string `json:"adv_dhcp_pt_values"`
-	AdvDhcpSendOptions              string `json:"adv_dhcp_send_options"`
-	AdvDhcpRequestOptions           string `json:"adv_dhcp_request_options"`
-	AdvDhcpRequiredOptions          string `json:"adv_dhcp_required_options"`
-	AdvDhcpOptionModifiers          string `json:"adv_dhcp_option_modifiers"`
-	AdvDhcpConfigAdvanced           string `json:"adv_dhcp_config_advanced"`
-	AdvDhcpConfigFileOverride       string `json:"adv_dhcp_config_file_override"`
-	AdvDhcpConfigFileOverridePath   string `json:"adv_dhcp_config_file_override_path"`
-	Ipaddrv6                        string `json:"ipaddrv6"`
-	Dhcp6Duid                       string `json:"dhcp6-duid"`
-	Dhcp6IaPdLen                    string `json:"dhcp6-ia-pd-len"`
-	AdvDhcp6PrefixSelectedInterface string `json:"adv_dhcp6_prefix_selected_interface"`
-	Blockpriv                       string `json:"blockpriv"`
-	Blockbogons                     string `json:"blockbogons"`
-	Subnet                          string `json:"subnet"`
-	Spoofmac                        string `json:"spoofmac"`
-	Name                            string `json:"name"`
+	Enable                          TrueIfPresent   `json:"enable"`
+	If                              string          `json:"if"`
+	Descr                           string          `json:"descr"`
+	AliasAddress                    string          `json:"alias-address"`
+	AliasSubnet                     OptionalJSONInt `json:"alias-subnet"`
+	Ipaddr                          string          `json:"ipaddr"`
+	Dhcprejectfrom                  string          `json:"dhcprejectfrom"`
+	AdvDhcpPtTimeout                OptionalJSONInt `json:"adv_dhcp_pt_timeout,omitempty"`
+	AdvDhcpPtRetry                  OptionalJSONInt `json:"adv_dhcp_pt_retry,omitempty"`
+	AdvDhcpPtSelectTimeout          OptionalJSONInt `json:"adv_dhcp_pt_select_timeout,omitempty"`
+	AdvDhcpPtReboot                 OptionalJSONInt `json:"adv_dhcp_pt_reboot,omitempty"`
+	AdvDhcpPtBackoffCutoff          OptionalJSONInt `json:"adv_dhcp_pt_backoff_cutoff,omitempty"`
+	AdvDhcpPtInitialInterval        OptionalJSONInt `json:"adv_dhcp_pt_initial_interval,omitempty"`
+	AdvDhcpPtValues                 string          `json:"adv_dhcp_pt_values"`
+	AdvDhcpSendOptions              string          `json:"adv_dhcp_send_options"`
+	AdvDhcpRequestOptions           string          `json:"adv_dhcp_request_options"`
+	AdvDhcpRequiredOptions          string          `json:"adv_dhcp_required_options"`
+	AdvDhcpOptionModifiers          string          `json:"adv_dhcp_option_modifiers"`
+	AdvDhcpConfigAdvanced           TrueIfPresent   `json:"adv_dhcp_config_advanced"`
+	AdvDhcpConfigFileOverride       TrueIfPresent   `json:"adv_dhcp_config_file_override"`
+	AdvDhcpConfigFileOverridePath   string          `json:"adv_dhcp_config_file_override_path"`
+	Ipaddrv6                        string          `json:"ipaddrv6"`
+	Dhcp6Duid                       string          `json:"dhcp6-duid"`
+	Dhcp6IaPdLen                    string          `json:"dhcp6-ia-pd-len"`
+	AdvDhcp6PrefixSelectedInterface string          `json:"adv_dhcp6_prefix_selected_interface"`
+	Blockpriv                       TrueIfPresent   `json:"blockpriv"`
+	Blockbogons                     TrueIfPresent   `json:"blockbogons"`
+	Subnet                          OptionalJSONInt `json:"subnet,omitempty"`
+	Spoofmac                        string          `json:"spoofmac"`
+	Name                            string          `json:"name"`
+	AdvDhcpConfigFileOverrideFile   string          `json:"adv_dhcp_config_file_override_file"`
+	Apply                           TrueIfPresent   `json:"apply"`
+	Dhcpcvpt                        OptionalJSONInt `json:"dhcpcvpt,omitempty"`
+	Dhcphostname                    string          `json:"dhcphostname"`
+	Dhcpvlanenable                  TrueIfPresent   `json:"dhcpvlanenable"`
+	Gateway                         string          `json:"gateway"`
+	Gateway6Rd                      string          `json:"gateway-6rd"`
+	Gatewayv6                       string          `json:"gatewayv6"`
+	Ipv6Usev4Iface                  TrueIfPresent   `json:"ipv6usev4iface"`
+	Media                           string          `json:"media"`
+	Mss                             string          `json:"mss"`
+	Mtu                             OptionalJSONInt `json:"mtu,omitempty"`
+	Prefix6Rd                       string          `json:"prefix-6rd"`
+	Prefix6RdV4Plen                 OptionalJSONInt `json:"prefix-6rd-v4plen,omitempty"`
+	Subnetv6                        string          `json:"subnetv6"`
+	Track6Interface                 string          `json:"track6-interface"`
+	Track6PrefixIdHex               OptionalJSONInt `json:"track6-prefix-id-hex,omitempty"`
+	Type                            string          `json:"type"`
+	Type6                           string          `json:"type6"`
 }
 
 type interfaceListResponse struct {
@@ -95,47 +115,47 @@ func (s InterfaceService) DeleteInterface(ctx context.Context, interfaceID strin
 type InterfaceRequest struct {
 	AdvDhcpConfigAdvanced         bool     `json:"adv_dhcp_config_advanced"`
 	AdvDhcpConfigFileOverride     bool     `json:"adv_dhcp_config_file_override"`
-	AdvDhcpConfigFileOverrideFile string   `json:"adv_dhcp_config_file_override_file"`
-	AdvDhcpOptionModifiers        string   `json:"adv_dhcp_option_modifiers"`
-	AdvDhcpPtBackoffCutoff        int      `json:"adv_dhcp_pt_backoff_cutoff"`
-	AdvDhcpPtInitialInterval      int      `json:"adv_dhcp_pt_initial_interval"`
-	AdvDhcpPtReboot               int      `json:"adv_dhcp_pt_reboot"`
-	AdvDhcpPtRetry                int      `json:"adv_dhcp_pt_retry"`
-	AdvDhcpPtSelectTimeout        int      `json:"adv_dhcp_pt_select_timeout"`
-	AdvDhcpPtTimeout              int      `json:"adv_dhcp_pt_timeout"`
-	AdvDhcpRequestOptions         string   `json:"adv_dhcp_request_options"`
-	AdvDhcpRequiredOptions        string   `json:"adv_dhcp_required_options"`
-	AdvDhcpSendOptions            string   `json:"adv_dhcp_send_options"`
-	AliasAddress                  string   `json:"alias-address"`
-	AliasSubnet                   int      `json:"alias-subnet"`
+	AdvDhcpConfigFileOverrideFile string   `json:"adv_dhcp_config_file_override_file,omitempty"`
+	AdvDhcpOptionModifiers        string   `json:"adv_dhcp_option_modifiers,omitempty"`
+	AdvDhcpPtBackoffCutoff        *int     `json:"adv_dhcp_pt_backoff_cutoff,omitempty"`
+	AdvDhcpPtInitialInterval      *int     `json:"adv_dhcp_pt_initial_interval,omitempty"`
+	AdvDhcpPtReboot               *int     `json:"adv_dhcp_pt_reboot,omitempty"`
+	AdvDhcpPtRetry                *int     `json:"adv_dhcp_pt_retry,omitempty"`
+	AdvDhcpPtSelectTimeout        *int     `json:"adv_dhcp_pt_select_timeout,omitempty"`
+	AdvDhcpPtTimeout              *int     `json:"adv_dhcp_pt_timeout,omitempty"`
+	AdvDhcpRequestOptions         string   `json:"adv_dhcp_request_options,omitempty"`
+	AdvDhcpRequiredOptions        string   `json:"adv_dhcp_required_options,omitempty"`
+	AdvDhcpSendOptions            string   `json:"adv_dhcp_send_options,omitempty"`
+	AliasAddress                  string   `json:"alias-address,omitempty"`
+	AliasSubnet                   *int     `json:"alias-subnet,omitempty"`
 	Apply                         bool     `json:"apply"`
 	Blockbogons                   bool     `json:"blockbogons"`
 	Blockpriv                     bool     `json:"blockpriv"`
 	Descr                         string   `json:"descr"`
-	Dhcpcvpt                      int      `json:"dhcpcvpt"`
-	Dhcphostname                  string   `json:"dhcphostname"`
-	Dhcprejectfrom                []string `json:"dhcprejectfrom"`
+	Dhcpcvpt                      *int     `json:"dhcpcvpt,omitempty"`
+	Dhcphostname                  string   `json:"dhcphostname,omitempty"`
+	Dhcprejectfrom                []string `json:"dhcprejectfrom,omitempty"`
 	Dhcpvlanenable                bool     `json:"dhcpvlanenable"`
 	Enable                        bool     `json:"enable"`
-	Gateway                       string   `json:"gateway"`
-	Gateway6Rd                    string   `json:"gateway-6rd"`
-	Gatewayv6                     string   `json:"gatewayv6"`
+	Gateway                       string   `json:"gateway,omitempty"`
+	Gateway6Rd                    string   `json:"gateway-6rd,omitempty"`
+	Gatewayv6                     string   `json:"gatewayv6,omitempty"`
 	If                            string   `json:"if"`
-	Ipaddr                        string   `json:"ipaddr"`
-	Ipaddrv6                      string   `json:"ipaddrv6"`
+	Ipaddr                        string   `json:"ipaddr,omitempty"`
+	Ipaddrv6                      string   `json:"ipaddrv6,omitempty"`
 	Ipv6Usev4Iface                bool     `json:"ipv6usev4iface"`
-	Media                         string   `json:"media"`
-	Mss                           string   `json:"mss"`
-	Mtu                           int      `json:"mtu"`
-	Prefix6Rd                     string   `json:"prefix-6rd"`
-	Prefix6RdV4Plen               int      `json:"prefix-6rd-v4plen"`
-	Spoofmac                      string   `json:"spoofmac"`
-	Subnet                        int      `json:"subnet"`
-	Subnetv6                      string   `json:"subnetv6"`
-	Track6Interface               string   `json:"track6-interface"`
-	Track6PrefixIdHex             int      `json:"track6-prefix-id-hex"`
-	Type                          string   `json:"type"`
-	Type6                         string   `json:"type6"`
+	Media                         string   `json:"media,omitempty"`
+	Mss                           string   `json:"mss,omitempty"`
+	Mtu                           *int     `json:"mtu,omitempty"`
+	Prefix6Rd                     string   `json:"prefix-6rd,omitempty"`
+	Prefix6RdV4Plen               *int     `json:"prefix-6rd-v4plen"`
+	Spoofmac                      string   `json:"spoofmac,omitempty"`
+	Subnet                        *int     `json:"subnet,omitempty"`
+	Subnetv6                      string   `json:"subnetv6,omitempty"`
+	Track6Interface               string   `json:"track6-interface,omitempty"`
+	Track6PrefixIdHex             *int     `json:"track6-prefix-id-hex,omitempty"`
+	Type                          string   `json:"type,omitempty"`
+	Type6                         string   `json:"type6,omitempty"`
 }
 
 type createInterfaceResponse struct {
@@ -173,12 +193,12 @@ type interfaceRequestUpdate struct {
 // UpdateInterface modifies an existing interface.
 func (s InterfaceService) UpdateInterface(
 	ctx context.Context,
-	idToUpdate int,
+	idToUpdate string,
 	interfaceData InterfaceRequest,
 ) (*Interface, error) {
 	requestData := interfaceRequestUpdate{
 		InterfaceRequest: interfaceData,
-		Id:               strconv.Itoa(idToUpdate),
+		Id:               idToUpdate,
 	}
 
 	jsonData, err := json.Marshal(requestData)
@@ -200,11 +220,11 @@ func (s InterfaceService) UpdateInterface(
 
 // VLAN represents a single VLAN.
 type VLAN struct {
-	If     string `json:"if"`
-	Tag    string `json:"tag"`
-	Pcp    string `json:"pcp"`
-	Descr  string `json:"descr"`
-	Vlanif string `json:"vlanif"`
+	If     string          `json:"if"`
+	Tag    JSONInt         `json:"tag"`
+	Pcp    OptionalJSONInt `json:"pcp"`
+	Descr  string          `json:"descr"`
+	Vlanif string          `json:"vlanif"`
 }
 
 type vlanListResponse struct {
@@ -228,12 +248,18 @@ func (s InterfaceService) ListVLANs(ctx context.Context) ([]*VLAN, error) {
 }
 
 // DeleteVLAN deletes a VLAN.
-func (s InterfaceService) DeleteVLAN(ctx context.Context, idToDelete int) error {
-	_, err := s.client.delete(
+func (s InterfaceService) DeleteVLAN(ctx context.Context, vlanIf string) error {
+	i, err := s.getVLANIndex(ctx, vlanIf)
+
+	if err != nil {
+		return err
+	}
+
+	_, err = s.client.delete(
 		ctx,
 		interfaceVLANEndpoint,
 		map[string]string{
-			"id": strconv.Itoa(idToDelete),
+			"id": strconv.Itoa(i),
 		},
 	)
 	if err != nil {
@@ -242,10 +268,26 @@ func (s InterfaceService) DeleteVLAN(ctx context.Context, idToDelete int) error 
 	return nil
 }
 
+func (s InterfaceService) getVLANIndex(ctx context.Context, vlanIf string) (int, error) {
+	vlans, err := s.ListVLANs(ctx)
+
+	if err != nil {
+		return -1, err
+	}
+
+	for i, vlan := range vlans {
+		if vlan.Vlanif == vlanIf {
+			return i, nil
+		}
+	}
+
+	return -1, fmt.Errorf("Unable to find VLAN IF %s", vlanIf)
+}
+
 type VLANRequest struct {
 	Descr string `json:"descr"`
 	If    string `json:"if"`
-	Pcp   int    `json:"pcp"`
+	Pcp   *int   `json:"pcp,omitempty"`
 	Tag   int    `json:"tag"`
 }
 
@@ -284,12 +326,18 @@ type vlanRequestUpdate struct {
 // UpdateVLAN modifies an existing VLAN.
 func (s InterfaceService) UpdateVLAN(
 	ctx context.Context,
-	idToUpdate int,
+	vlanIf string,
 	vlanData VLANRequest,
 ) (*VLAN, error) {
+	i, err := s.getVLANIndex(ctx, vlanIf)
+
+	if err != nil {
+		return nil, err
+	}
+
 	requestData := vlanRequestUpdate{
 		VLANRequest: vlanData,
-		Id:          idToUpdate,
+		Id:          i,
 	}
 
 	jsonData, err := json.Marshal(requestData)
@@ -297,7 +345,7 @@ func (s InterfaceService) UpdateVLAN(
 		return nil, err
 	}
 
-	response, err := s.client.put(ctx, interfaceEndpoint, nil, jsonData)
+	response, err := s.client.put(ctx, interfaceVLANEndpoint, nil, jsonData)
 	if err != nil {
 		return nil, err
 	}
