@@ -7,11 +7,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"golang.org/x/exp/slices"
 	"io"
 	"net/http"
 	"sync"
 	"time"
+
+	"golang.org/x/exp/slices"
 )
 
 var (
@@ -39,6 +40,7 @@ type Client struct {
 	System    *SystemService
 	Token     *TokenService
 	DHCP      *DHCPService
+	Unbound   *UnboundService
 	Status    *StatusService
 	Interface *InterfaceService
 	Routing   *RoutingService
@@ -96,6 +98,7 @@ func NewClient(config Config) *Client {
 	newClient.Routing = &RoutingService{client: newClient}
 	newClient.Firewall = &FirewallService{client: newClient}
 	newClient.User = &UserService{client: newClient}
+	newClient.Unbound = &UnboundService{client: newClient}
 	return newClient
 }
 
