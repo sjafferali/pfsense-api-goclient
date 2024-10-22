@@ -7,10 +7,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"golang.org/x/exp/slices"
 	"io"
 	"net/http"
+	"sync"
 	"time"
+
+	"golang.org/x/exp/slices"
 )
 
 var (
@@ -33,10 +35,12 @@ var (
 type Client struct {
 	client *http.Client
 	Cfg    Config
+	lock   sync.Mutex
 
 	System    *SystemService
 	Token     *TokenService
 	DHCP      *DHCPService
+	Unbound   *UnboundService
 	Status    *StatusService
 	Interface *InterfaceService
 	Routing   *RoutingService
@@ -94,6 +98,7 @@ func NewClient(config Config) *Client {
 	newClient.Routing = &RoutingService{client: newClient}
 	newClient.Firewall = &FirewallService{client: newClient}
 	newClient.User = &UserService{client: newClient}
+	newClient.Unbound = &UnboundService{client: newClient}
 	return newClient
 }
 
@@ -286,6 +291,10 @@ func (c *Client) get(ctx context.Context, endpoint string, queryMap map[string]s
 }
 
 func (c *Client) post(ctx context.Context, endpoint string, queryMap map[string]string, body []byte) ([]byte, error) {
+	// PFSense API cannot handle concurrent write requests
+	c.lock.Lock()
+	defer c.lock.Unlock()
+
 	res, err := c.do(ctx, http.MethodPost, endpoint, queryMap, body)
 	if err != nil {
 		return nil, err
@@ -312,6 +321,10 @@ func (c *Client) post(ctx context.Context, endpoint string, queryMap map[string]
 }
 
 func (c *Client) put(ctx context.Context, endpoint string, queryMap map[string]string, body []byte) ([]byte, error) {
+	// PFSense API cannot handle concurrent write requests
+	c.lock.Lock()
+	defer c.lock.Unlock()
+
 	res, err := c.do(ctx, http.MethodPut, endpoint, queryMap, body)
 	if err != nil {
 		return nil, err
@@ -338,6 +351,10 @@ func (c *Client) put(ctx context.Context, endpoint string, queryMap map[string]s
 }
 
 func (c *Client) delete(ctx context.Context, endpoint string, queryMap map[string]string) ([]byte, error) {
+	// PFSense API cannot handle concurrent write requests
+	c.lock.Lock()
+	defer c.lock.Unlock()
+
 	res, err := c.do(ctx, http.MethodDelete, endpoint, queryMap, nil)
 	if err != nil {
 		return nil, err

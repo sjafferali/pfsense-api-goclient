@@ -1,0 +1,22 @@
+{
+    "status": "ok",
+    "code": 200,
+    "return": 0,
+    "message": "Success",
+    "data": [
+      {
+        "host": "one",
+        "domain": "test.com",
+        "ip": "192.168.1.1",
+        "descr": "1",
+        "aliases": ""
+      },
+      {
+        "host": "two",
+        "domain": "test.com",
+        "ip": "192.168.1.1",
+        "descr": "two",
+        "aliases": ""
+      }
+    ]
+  }

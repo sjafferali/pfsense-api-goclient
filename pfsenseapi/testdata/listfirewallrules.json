@@ -1,0 +1,31 @@
+{
+    "status": "ok",
+    "code": 200,
+    "return": 0,
+    "message": "Success",
+    "data": [
+        {
+        "type": "pass",
+        "interface": "opt9",
+        "ipprotocol": "inet",
+        "protocol": "tcp",
+        "source": {
+          "address": "GuestNetworkAlias"
+        },
+        "destination": {
+          "network": "(self)",
+          "port": "853"
+        },
+        "descr": "DNS over TLS",
+        "tracker": "1702725724",
+        "created": {
+          "time": "1702725724",
+          "username": "admin (API)"
+        },
+        "updated": {
+          "time": "1702725724",
+          "username": "admin (API)"
+        }
+      }
+    ]
+  }

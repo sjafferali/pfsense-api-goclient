@@ -6,15 +6,52 @@
   "data": [
     {
       "id": 0,
-      "mac": "52:49:23:6e:ce:90",
-      "cid": "",
-      "ipaddr": "192.168.1.2",
-      "hostname": "host1",
-      "descr": "host1",
+      "mac": "b4:5e:1c:9a:3b",
+      "ipaddr": "192.168.0.2",
+      "cid": "one",
+      "descr": "one",
+      "hostname": "",
+      "domain": "",
+      "gateway": ""
+    },
+    {
+      "id": 1,
+      "mac": "c0:57:22:6f:98:12",
+      "ipaddr": "192.168.0.3",
+      "cid": "two",
+      "descr": "two",
+      "hostname": "",
+      "domain": "",
+      "gateway": "",
+      "arp_table_static_entry": ""
+    },
+    {
+      "id": 2,
+      "mac": "9e:af:34:56:7b",
+      "ipaddr": "192.168.0.4",
+      "cid": "three",
+      "descr": "three",
+      "hostname": "",
+      "domain": "",
+      "gateway": "",
+      "arp_table_static_entry": ""
+    },
+    {
+      "id": 3,
+      "mac": "00:1d:93:aa:4c",
+      "cid": "four",
+      "ipaddr": "192.168.0.5",
+      "hostname": "",
+      "descr": "",
+      "arp_table_static_entry": "",
       "filename": "",
       "rootpath": "",
       "defaultleasetime": "",
       "maxleasetime": "",
+      "dnsserver": [
+        "1.1.1.1",
+        "8.8.8.8"
+      ],
       "gateway": "",
       "domain": "",
       "domainsearchlist": "",
@@ -31,6 +68,7 @@
       "filename64": "",
       "filename32arm": "",
       "filename64arm": "",
+      "uefihttpboot": "",
       "numberoptions": ""
     }
   ]

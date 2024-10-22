@@ -1,0 +1,43 @@
+{
+    "status": "ok",
+    "code": 200,
+    "return": 0,
+    "message": "Success",
+    "data": {
+        "interface": "opt4",
+        "range": {
+          "from": "192.168.1.2",
+          "to": "192.168.1.254"
+        },
+        "failover_peerip": "",
+        "defaultleasetime": "",
+        "maxleasetime": "",
+        "netmask": "",
+        "gateway": "",
+        "domain": "",
+        "domainsearchlist": "",
+        "ddnsdomain": "",
+        "ddnsdomainprimary": "",
+        "ddnsdomainsecondary": "",
+        "ddnsdomainkeyname": "",
+        "ddnsdomainkeyalgorithm": "hmac-md5",
+        "ddnsdomainkey": "",
+        "mac_allow": "",
+        "mac_deny": "",
+        "ddnsclientupdates": "allow",
+        "tftp": "",
+        "ldap": "",
+        "nextserver": "",
+        "filename": "",
+        "filename32": "",
+        "filename64": "",
+        "filename32arm": "",
+        "filename64arm": "",
+        "rootpath": "",
+        "numberoptions": "",
+        "enable": "",
+        "denyunknown": "",
+        "staticmap": []
+      }
+  }
+  

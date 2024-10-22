@@ -1,0 +1,40 @@
+{
+    "status": "ok",
+    "code": 200,
+    "return": 0,
+    "message": "Success",
+    "data": {
+      "mac": "00:1d:93:aa:4c",
+      "cid": "test",
+      "ipaddr": "192.168.0.5",
+      "hostname": "",
+      "descr": "",
+      "arp_table_static_entry": "",
+      "filename": "",
+      "rootpath": "",
+      "defaultleasetime": "",
+      "maxleasetime": "",
+      "dnsserver": [
+        "1.1.1.1",
+        "8.8.8.8"
+      ],
+      "gateway": "",
+      "domain": "",
+      "domainsearchlist": "",
+      "ddnsdomain": "",
+      "ddnsdomainprimary": "",
+      "ddnsdomainsecondary": "",
+      "ddnsdomainkeyname": "",
+      "ddnsdomainkeyalgorithm": "hmac-md5",
+      "ddnsdomainkey": "",
+      "tftp": "",
+      "ldap": "",
+      "nextserver": "",
+      "filename32": "",
+      "filename64": "",
+      "filename32arm": "",
+      "filename64arm": "",
+      "uefihttpboot": "",
+      "numberoptions": ""
+    }
+  }
