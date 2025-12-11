@@ -1,0 +1,46 @@
+{
+  "code": 0,
+  "message": "OK",
+  "data": [
+    {
+      "id": 1,
+      "enabled": true,
+      "tun": "tun_wg0",
+      "endpoint": "192.168.1.100",
+      "port": "51820",
+      "descr": "Test Peer 1",
+      "persistentkeepalive": 25,
+      "publickey": "PeerPublicKey123456789ABCDEF=",
+      "presharedkey": "",
+      "allowedips": [
+        {
+          "parent_id": 1,
+          "id": 0,
+          "address": "10.0.0.2",
+          "mask": 32,
+          "descr": "Peer 1 IP"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "enabled": true,
+      "tun": "tun_wg0",
+      "endpoint": "192.168.1.101",
+      "port": "51820",
+      "descr": "Test Peer 2",
+      "persistentkeepalive": 25,
+      "publickey": "PeerPublicKey987654321FEDCBA=",
+      "presharedkey": "",
+      "allowedips": [
+        {
+          "parent_id": 2,
+          "id": 0,
+          "address": "10.0.0.3",
+          "mask": 32,
+          "descr": "Peer 2 IP"
+        }
+      ]
+    }
+  ]
+}

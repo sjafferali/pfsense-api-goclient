@@ -1,0 +1,28 @@
+{
+  "code": 0,
+  "message": "OK",
+  "data": [
+    {
+      "id": 1,
+      "name": "tun_wg0",
+      "enabled": true,
+      "listenport": "51820",
+      "privatekey": "aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789ABCDEF=",
+      "publickey": "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef=",
+      "mtu": 1420,
+      "descr": "Test WireGuard Tunnel 1",
+      "address": ["10.0.0.1/24"]
+    },
+    {
+      "id": 2,
+      "name": "tun_wg1",
+      "enabled": true,
+      "listenport": "51821",
+      "privatekey": "zYxWvUtSrQpOnMlKjIhGfEdCbA9876543210FEDCBA=",
+      "publickey": "fedcba9876543210ZYXWVUTSRQPONMLKJIHGFEdcba=",
+      "mtu": 1420,
+      "descr": "Test WireGuard Tunnel 2",
+      "address": ["10.0.1.1/24"]
+    }
+  ]
+}

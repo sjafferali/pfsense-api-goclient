@@ -1,0 +1,15 @@
+{
+  "code": 0,
+  "message": "OK",
+  "data": {
+    "id": 1,
+    "name": "tun_wg0",
+    "enabled": true,
+    "listenport": "51820",
+    "privatekey": "aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789ABCDEF=",
+    "publickey": "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef=",
+    "mtu": 1420,
+    "descr": "Test WireGuard Tunnel",
+    "address": ["10.0.0.1/24"]
+  }
+}

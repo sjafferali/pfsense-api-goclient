@@ -15,3 +15,6 @@
 vendor/
 
 .idea/
+
+# E2E test configuration (contains credentials)
+e2e_config.json

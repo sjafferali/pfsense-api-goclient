@@ -3,7 +3,6 @@ package pfsenseapi
 import (
 	"context"
 	"encoding/json"
-	"io"
 	"net/http"
 	"net/http/httptest"
 	"strconv"
@@ -27,7 +26,7 @@ func TestClientErrors(t *testing.T) {
 			handler := func(w http.ResponseWriter, r *http.Request) {
 				w.Header().Set("Content-Type", "application/json")
 				w.WriteHeader(code)
-				_, err := io.WriteString(w, string(response))
+				_, err := w.Write(response)
 				require.NoError(t, err)
 			}
 

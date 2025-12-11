@@ -33,6 +33,8 @@ type Client struct {
 
 	Interface *InterfaceService
 	User      *UserService
+	WireGuard *WireGuardService
+	Firewall  *FirewallService
 }
 
 // Config provides configuration for the client. These values are only read in
@@ -79,6 +81,8 @@ func NewClient(config Config) *Client {
 	}
 	newClient.Interface = &InterfaceService{client: newClient}
 	newClient.User = &UserService{client: newClient}
+	newClient.WireGuard = &WireGuardService{client: newClient}
+	newClient.Firewall = &FirewallService{client: newClient}
 	return newClient
 }
 

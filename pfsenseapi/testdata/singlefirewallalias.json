@@ -1,0 +1,12 @@
+{
+  "code": 0,
+  "message": "OK",
+  "data": {
+    "id": 1,
+    "name": "test_alias",
+    "type": "host",
+    "descr": "Test Alias",
+    "address": ["192.168.1.1", "192.168.1.2"],
+    "detail": ["Host 1", "Host 2"]
+  }
+}

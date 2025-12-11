@@ -1,0 +1,34 @@
+{
+  "code": 0,
+  "message": "OK",
+  "data": [
+    {
+      "id": 1,
+      "type": "pass",
+      "interface": ["wan"],
+      "ipprotocol": "inet",
+      "protocol": "tcp",
+      "source": "any",
+      "source_port": "",
+      "destination": "any",
+      "destination_port": "443",
+      "descr": "Allow HTTPS",
+      "log": true,
+      "disabled": false
+    },
+    {
+      "id": 2,
+      "type": "pass",
+      "interface": ["wan"],
+      "ipprotocol": "inet",
+      "protocol": "tcp",
+      "source": "any",
+      "source_port": "",
+      "destination": "any",
+      "destination_port": "80",
+      "descr": "Allow HTTP",
+      "log": false,
+      "disabled": false
+    }
+  ]
+}
